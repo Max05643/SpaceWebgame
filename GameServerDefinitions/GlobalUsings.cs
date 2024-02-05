@@ -1,0 +1,1 @@
+﻿global using PlayerId = System.Guid;
