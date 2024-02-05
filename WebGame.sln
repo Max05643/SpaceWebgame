@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameServerDefinitions", "GameServerDefinitions\GameServerDefinitions.csproj", "{4DC23F25-A211-4AC3-8B98-A0A2C94A7D50}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameServerImplementation", "GameServerImplementation\GameServerImplementation.csproj", "{90651651-0B6E-401B-856B-F51B4B4CA838}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameServerImplementation.Tests", "GameServerImplementation.Tests\GameServerImplementation.Tests.csproj", "{93E967B4-3AAB-46EB-A8A3-EE0E403EAAB7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4DC23F25-A211-4AC3-8B98-A0A2C94A7D50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DC23F25-A211-4AC3-8B98-A0A2C94A7D50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DC23F25-A211-4AC3-8B98-A0A2C94A7D50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DC23F25-A211-4AC3-8B98-A0A2C94A7D50}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90651651-0B6E-401B-856B-F51B4B4CA838}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90651651-0B6E-401B-856B-F51B4B4CA838}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90651651-0B6E-401B-856B-F51B4B4CA838}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90651651-0B6E-401B-856B-F51B4B4CA838}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93E967B4-3AAB-46EB-A8A3-EE0E403EAAB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93E967B4-3AAB-46EB-A8A3-EE0E403EAAB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93E967B4-3AAB-46EB-A8A3-EE0E403EAAB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93E967B4-3AAB-46EB-A8A3-EE0E403EAAB7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
