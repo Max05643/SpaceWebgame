@@ -44,7 +44,7 @@ namespace GameServerImplementation.Tests
         }
 
         [Fact]
-        public void CanAddPlayerToTheGame()
+        public async Task CanAddPlayerToTheGame()
         {
             PlayerId playerId = PlayerId.NewGuid();
 
@@ -73,12 +73,14 @@ namespace GameServerImplementation.Tests
             gameServer.AddPlayer(playerId);
 
 
+            await Task.Delay(100);
+
             gameServer.CurrentPlayers.ShouldContain(playerId);
             gameServer.IsPlayerInGame(playerId).ShouldBeTrue();
         }
 
         [Fact]
-        public void CanKickPlayerFromTheGame()
+        public async Task CanKickPlayerFromTheGame()
         {
             PlayerId playerId = PlayerId.NewGuid();
 
@@ -108,13 +110,15 @@ namespace GameServerImplementation.Tests
             gameServer.AddPlayer(playerId);
             gameServer.KickPlayer(playerId);
 
+            await Task.Delay(100);
+
             gameServer.CurrentPlayers.ShouldNotContain(playerId);
             gameServer.IsPlayerInGame(playerId).ShouldBeFalse();
             playersCommunicationMock.Verify(p => p.NotifyPlayerThatHeIsKicked(It.IsAny<PlayerId>()), Times.Once);
         }
 
         [Fact]
-        public void CanLeaveTheGame()
+        public async Task CanLeaveTheGame()
         {
             PlayerId playerId = PlayerId.NewGuid();
 
@@ -144,13 +148,15 @@ namespace GameServerImplementation.Tests
             gameServer.AddPlayer(playerId);
             gameServer.LeaveGame(playerId);
 
+            await Task.Delay(100);
+
             gameServer.CurrentPlayers.ShouldNotContain(playerId);
             gameServer.IsPlayerInGame(playerId).ShouldBeFalse();
             playersCommunicationMock.Verify(p => p.NotifyPlayerThatHeIsKicked(It.IsAny<PlayerId>()), Times.Never);
         }
 
         [Fact]
-        public void CanSendPlayerInput()
+        public async Task CanSendPlayerInput()
         {
             PlayerId playerId = PlayerId.NewGuid();
 
@@ -180,6 +186,7 @@ namespace GameServerImplementation.Tests
             ((IGameServer<IGameState<string, string>, string, string>)gameServer).AddPlayer(playerId);
             ((IGameServer<IGameState<string, string>, string, string>)gameServer).AcceptPlayerInput("input1", playerId);
 
+            await Task.Delay(100);
 
             ((IGameController<string, string>)gameServer).PopPlayerInput(playerId).ShouldBe("input1");
             playerInputProcessorMock.Verify(p => p.GetDefaultInput(), Times.Once);
@@ -212,7 +219,7 @@ namespace GameServerImplementation.Tests
             gameStateMock.Verify(c => c.Tick(It.IsAny<TimeSpan>(), It.IsAny<IGameController<string, string>>()), Times.AtLeastOnce);
         }
         [Fact]
-        public void CanSendUpdates()
+        public async Task CanSendUpdates()
         {
             PlayerId playerId = PlayerId.NewGuid();
 
@@ -232,6 +239,8 @@ namespace GameServerImplementation.Tests
             var gameServer = (IGameServer<IGameState<string, string>, string, string>)(new GameServer<IGameState<string, string>, string, string>(gameStateFactoryMock.Object, playersCommunicationMock.Object, playerInputProcessorMock.Object, settings, testingInputStorage));
 
             ((IGameController<string, string>)gameServer).SendUpdate("update", playerId);
+
+            await Task.Delay(100);
 
             playersCommunicationMock.Verify(c => c.SendUpdate(It.Is<string>(s => s == "update"), It.IsAny<PlayerId>()), Times.AtLeastOnce);
         }
