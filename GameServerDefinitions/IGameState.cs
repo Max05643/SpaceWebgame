@@ -16,23 +16,23 @@ namespace GameServerDefinitions
         /// <summary>
         /// Adds player to the game. Does nothing if operation is impossible. Returns true if player is in game (even if he was before this call) and false otherwise
         /// </summary>
-        public bool AddPlayer(PlayerId playerId);
+        bool AddPlayer(PlayerId playerId);
 
         /// <summary>
         /// Removes player from the game. Does nothing if operation is impossible (if player is already not in the game)
         /// </summary>
-        public void RemovePlayer(PlayerId playerId);
+        void RemovePlayer(PlayerId playerId);
 
         /// <summary>
         /// Will process the update of the game state and send individual game state updates to players via gameController
         /// </summary>
         /// <param name="deltaTime">Time passed since the last call to this method</param>
-        public void Tick(TimeSpan deltaTime, IGameController<PlayerUpdate> gameController);
+        void Tick(TimeSpan deltaTime, IGameController<PlayerUpdate, PlayerInput> gameController);
 
         /// <summary>
         /// Returns ids of current players
         /// </summary>
-        public IEnumerable<PlayerId> CurrentPlayers { get; }
+        IEnumerable<PlayerId> CurrentPlayers { get; }
 
 
         /// <summary>
