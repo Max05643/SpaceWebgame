@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace GameServerImplementation
 {
@@ -16,60 +17,71 @@ namespace GameServerImplementation
         private readonly IPlayersCommunication<PlayerUpdate> playersCommunication;
         private readonly GameState gameState;
         private readonly GameServerSettings serverSettings;
-        private readonly IPlayerInputProcessor<PlayerInput> playerInputProcessor;
-        private readonly PlayerInputStorage<PlayerUpdate> playerInputStorage;
-        public GameServer(IGameStateFactory<GameState, PlayerInput, PlayerUpdate> gameStateFactory, IPlayersCommunication<PlayerUpdate> playersCommunication, IPlayerInputProcessor<PlayerInput> playerInputProcessor, GameServerSettings serverSettings, PlayerInputStorage<PlayerUpdate> playerInputStorage)
+        private readonly PlayerInputStorage<PlayerInput> playerInputStorage;
+        private readonly ILogger<GameServer<GameState, PlayerInput, PlayerUpdate>> logger;
+
+        private readonly CancellationTokenSource cancellationTokenSource;
+
+        public GameServer(IGameStateFactory<GameState, PlayerInput, PlayerUpdate> gameStateFactory, IPlayersCommunication<PlayerUpdate> playersCommunication, IPlayerInputProcessor<PlayerInput> playerInputProcessor, GameServerSettings serverSettings, IPlayerInputStorageFactory<PlayerInput> playerInputStorageFactory, ILogger<GameServer<GameState, PlayerInput, PlayerUpdate>> logger)
         {
+            cancellationTokenSource = new CancellationTokenSource();
+
             this.playersCommunication = playersCommunication;
-            this.playerInputProcessor = playerInputProcessor;
             this.serverSettings = serverSettings;
-            this.playerInputStorage = playerInputStorage;
+            playerInputStorage = playerInputStorageFactory.CreateNewStorage(playerInputProcessor);
+            this.logger = logger;
 
             gameState = gameStateFactory.StartNewGame();
         }
 
-        bool IGameServer<GameState, PlayerInput, PlayerUpdate>.IsRunning => throw new NotImplementedException();
+        bool IGameServer<GameState, PlayerInput, PlayerUpdate>.IsRunning => !cancellationTokenSource.IsCancellationRequested;
 
-        IEnumerable<PlayerId> IGameServer<GameState, PlayerInput, PlayerUpdate>.CurrentPlayers => throw new NotImplementedException();
+        async Task<IEnumerable<PlayerId>> IGameServer<GameState, PlayerInput, PlayerUpdate>.GetCurrentPlayers()
+        {
+            throw new NotImplementedException();
+        }
+        async Task IGameServer<GameState, PlayerInput, PlayerUpdate>.AcceptPlayerInput(PlayerInput playerInput, PlayerId playerId)
+        {
+            if (await IsPlayerInGame(playerId))
+            {
+                playerInputStorage.StoreNewInput(playerInput, playerId);
+            }
+        }
 
-        void IGameServer<GameState, PlayerInput, PlayerUpdate>.AcceptPlayerInput(PlayerInput playerInput, PlayerId playerId)
+        async Task<bool> IGameServer<GameState, PlayerInput, PlayerUpdate>.AddPlayer(PlayerId playerId)
         {
             throw new NotImplementedException();
         }
 
-        bool IGameServer<GameState, PlayerInput, PlayerUpdate>.AddPlayer(PlayerId playerId)
+        public async Task<bool> IsPlayerInGame(PlayerId playerId)
         {
             throw new NotImplementedException();
         }
 
-        bool IGameServer<GameState, PlayerInput, PlayerUpdate>.IsPlayerInGame(PlayerId playerId)
+        async Task IGameServer<GameState, PlayerInput, PlayerUpdate>.KickPlayer(PlayerId playerId)
         {
             throw new NotImplementedException();
         }
 
-        void IGameServer<GameState, PlayerInput, PlayerUpdate>.KickPlayer(PlayerId playerId)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IGameServer<GameState, PlayerInput, PlayerUpdate>.LeaveGame(PlayerId playerId)
+        async Task IGameServer<GameState, PlayerInput, PlayerUpdate>.LeaveGame(PlayerId playerId)
         {
             throw new NotImplementedException();
         }
 
         PlayerInput IGameController<PlayerUpdate, PlayerInput>.PopPlayerInput(PlayerId playerId)
         {
-            throw new NotImplementedException();
+            return playerInputStorage.PopPlayerInput(playerId);
         }
 
         void IGameController<PlayerUpdate, PlayerInput>.SendUpdate(PlayerUpdate playerUpdate, PlayerId playerId)
         {
-            throw new NotImplementedException();
+            playersCommunication.SendUpdate(playerUpdate, playerId);
         }
 
         void IGameServer<GameState, PlayerInput, PlayerUpdate>.StopGame()
         {
-            throw new NotImplementedException();
+            cancellationTokenSource.Cancel();
+            cancellationTokenSource.Dispose();
         }
     }
 }

@@ -14,22 +14,22 @@ namespace GameServerDefinitions
         /// <summary>
         /// Adds input by the specified player. Does nothing if operation is impossible. Should be implemented with IPlayerInputProcessor
         /// </summary>
-        void AcceptPlayerInput(PlayerInput playerInput, PlayerId playerId);
+        Task AcceptPlayerInput(PlayerInput playerInput, PlayerId playerId);
 
         /// <summary>
         /// Removes player from the game and notifies player that he has been kicked if he is in the game. Does nothing if operation is impossible (if player is already not in the game)
         /// </summary>
-        void KickPlayer(PlayerId playerId);
+        Task KickPlayer(PlayerId playerId);
 
         /// <summary>
         /// Removes player from the game. Does nothing if operation is impossible (if player is already not in the game)
         /// </summary>
-        void LeaveGame(PlayerId playerId);
+        Task LeaveGame(PlayerId playerId);
 
         /// <summary>
         /// Adds player to the game. Does nothing if operation is impossible. Returns true if player is in game (even if he was before this call) and false otherwise
         /// </summary>
-        bool AddPlayer(PlayerId playerId);
+        Task<bool> AddPlayer(PlayerId playerId);
 
         /// <summary>
         /// Stops the game without the option of restarting it. Does nothing if the game is already stopped 
@@ -44,11 +44,11 @@ namespace GameServerDefinitions
         /// <summary>
         /// Returns ids of current players
         /// </summary>
-        IEnumerable<PlayerId> CurrentPlayers { get; }
+        Task<IEnumerable<PlayerId>> GetCurrentPlayers();
 
         /// <summary>
         /// Checks if specified player is in game
         /// </summary>
-        bool IsPlayerInGame(PlayerId playerId);
+        Task<bool> IsPlayerInGame(PlayerId playerId);
     }
 }

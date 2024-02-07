@@ -6,13 +6,23 @@ using System.Threading.Tasks;
 
 namespace GameServerImplementation.Tests
 {
+
+
+    public class TestingPlayerInputStorageFactory<PlayerInput> : IPlayerInputStorageFactory<PlayerInput>
+    {
+        PlayerInputStorage<PlayerInput> IPlayerInputStorageFactory<PlayerInput>.CreateNewStorage(IPlayerInputProcessor<PlayerInput> playerInputProcessor)
+        {
+            return new TestingPlayerInputStorage<PlayerInput>(playerInputProcessor);
+        }
+    }
+
     /// <summary>
     /// In-memory storage of players' input for testing purposes. Does not provide thread-safety
     /// </summary>
     public class TestingPlayerInputStorage<PlayerInput> : PlayerInputStorage<PlayerInput>
     {
 
-        Dictionary<PlayerId, PlayerInput> storage = new Dictionary<PlayerId, PlayerInput>();
+        public Dictionary<PlayerId, PlayerInput> storage = new Dictionary<PlayerId, PlayerInput>();
 
         public TestingPlayerInputStorage(IPlayerInputProcessor<PlayerInput> playerInputProcessor) : base(playerInputProcessor)
         {
