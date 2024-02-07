@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,18 +9,24 @@ namespace GameServerImplementation.ServerEvents
 {
     internal class GameTickEvent<GameState, PlayerInput, PlayerUpdate> : ServerEvent<GameState, PlayerInput, PlayerUpdate> where GameState : IGameState<PlayerInput, PlayerUpdate>
     {
-        readonly int deltaTimeMs;
+        readonly Stopwatch stopwatch;
         readonly IGameController<PlayerUpdate, PlayerInput> gameController;
 
-        public GameTickEvent(int deltaTimeMs, IGameController<PlayerUpdate, PlayerInput> gameController)
+        public GameTickEvent(Stopwatch stopwatch, IGameController<PlayerUpdate, PlayerInput> gameController)
         {
-            this.deltaTimeMs = deltaTimeMs;
+            this.stopwatch = stopwatch;
             this.gameController = gameController;
         }
 
         public override void Perform(GameState gameState, GameServerSettings serverSettings, IPlayersCommunication<PlayerUpdate> playersCommunication, PlayerInputStorage<PlayerInput> playerInputStorage)
         {
-            gameState.Tick(TimeSpan.FromMilliseconds(deltaTimeMs), gameController);
+            stopwatch.Stop();
+
+            var deltaTime = stopwatch.Elapsed;
+
+            stopwatch.Restart();
+
+            gameState.Tick(deltaTime, gameController);
         }
     }
 }

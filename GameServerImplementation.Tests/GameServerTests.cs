@@ -248,7 +248,6 @@ namespace GameServerImplementation.Tests
             playerInputProcessorMock.Verify(p => p.PopInput(It.IsAny<string>(), out s), Times.Once);
         }
 
-
         [Fact]
         public async Task CanStorePlayerInput()
         {
@@ -276,7 +275,7 @@ namespace GameServerImplementation.Tests
             playerInputProcessorMock.Setup(p => p.PopInput(It.IsAny<string>(), out s)).Returns((string oldI, out string newI) => { newI = oldI; return oldI; });
 
             var playerInputFactoryMock = new Mock<IPlayerInputStorageFactory<string>>();
-            var playerInputStorageMock = new Mock<PlayerInputStorage<string>>();
+            var playerInputStorageMock = new Mock<PlayerInputStorage<string>>(playerInputProcessorMock.Object);
             playerInputStorageMock.Setup(s => s.PopPlayerInput(It.IsAny<PlayerId>())).Returns("input1");
             playerInputFactoryMock.Setup(f => f.CreateNewStorage(It.IsAny<IPlayerInputProcessor<string>>())).Returns(playerInputStorageMock.Object);
 
@@ -318,7 +317,7 @@ namespace GameServerImplementation.Tests
             playerInputProcessorMock.Setup(p => p.PopInput(It.IsAny<string>(), out s)).Returns((string oldI, out string newI) => { newI = oldI; return oldI; });
 
             var playerInputFactoryMock = new Mock<IPlayerInputStorageFactory<string>>();
-            var playerInputStorageMock = new Mock<PlayerInputStorage<string>>();
+            var playerInputStorageMock = new Mock<PlayerInputStorage<string>>(playerInputProcessorMock.Object);
             playerInputStorageMock.Setup(s => s.PopPlayerInput(It.IsAny<PlayerId>())).Returns("input1");
             playerInputFactoryMock.Setup(f => f.CreateNewStorage(It.IsAny<IPlayerInputProcessor<string>>())).Returns(playerInputStorageMock.Object);
 
@@ -386,5 +385,34 @@ namespace GameServerImplementation.Tests
 
             playersCommunicationMock.Verify(c => c.SendUpdate(It.Is<string>(s => s == "update"), It.IsAny<PlayerId>()), Times.AtLeastOnce);
         }
+
+        [Fact]
+        public async Task CanProcessManyTicks()
+        {
+            var loggerMock = new Mock<ILogger<GameServer<IGameState<string, string>, string, string>>>();
+
+            PlayerId playerId = PlayerId.NewGuid();
+
+            var settings = new GameServerSettings() { TargetTickTimeMs = 20};
+            var playersCommunicationMock = new Mock<IPlayersCommunication<string>>();
+            var gameStateMock = new Mock<IGameState<string, string>>();
+
+            var playersStorageMock = new List<PlayerId>();
+            gameStateMock.Setup(g => g.AddPlayer(It.IsAny<PlayerId>())).Returns((PlayerId id) => { playersStorageMock.Add(id); return true; });
+            var gameStateFactoryMock = new Mock<IGameStateFactory<IGameState<string, string>, string, string>>();
+            gameStateFactoryMock.Setup(f => f.StartNewGame()).Returns(gameStateMock.Object);
+
+            var playerInputProcessorMock = new Mock<IPlayerInputProcessor<string>>();
+
+            var testingInputStorage = new TestingPlayerInputStorageFactory<string>();
+
+            var gameServer = (IGameServer<IGameState<string, string>, string, string>)(new GameServer<IGameState<string, string>, string, string>(gameStateFactoryMock.Object, playersCommunicationMock.Object, playerInputProcessorMock.Object, settings, testingInputStorage, loggerMock.Object));
+
+            await Task.Delay(300);
+
+            gameStateMock.Verify(c => c.Tick(It.IsAny<TimeSpan>(), It.IsAny<IGameController<string, string>>()), Times.AtLeast(10));
+        }
+
+
     }
 }

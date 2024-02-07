@@ -9,11 +9,11 @@ namespace GameServerImplementation.ServerEvents
     internal class KickPlayerEvent<GameState, PlayerInput, PlayerUpdate> : ServerEvent<GameState, PlayerInput, PlayerUpdate> where GameState : IGameState<PlayerInput, PlayerUpdate>
     {
         readonly PlayerId playerId;
-        readonly PlayerInputStorage<PlayerUpdate> playerInputStorage;
-        public KickPlayerEvent(PlayerId playerId, PlayerInputStorage<PlayerUpdate> playerInputStorage)
+        readonly TaskCompletionSource taskCompletionSource;
+        public KickPlayerEvent(PlayerId playerId, TaskCompletionSource taskCompletionSource)
         {
             this.playerId = playerId;
-            this.playerInputStorage = playerInputStorage;
+            this.taskCompletionSource = taskCompletionSource;
         }
 
 
@@ -23,6 +23,7 @@ namespace GameServerImplementation.ServerEvents
             playersCommunication.NotifyPlayerThatHeIsKicked(playerId);
             playerInputStorage.DisposePlayer(playerId);
             playersCommunication.DisposePlayerConnection(playerId);
+            taskCompletionSource.SetResult();
         }
     }
 }

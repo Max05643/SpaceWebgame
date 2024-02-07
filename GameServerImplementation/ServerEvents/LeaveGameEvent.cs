@@ -9,11 +9,11 @@ namespace GameServerImplementation.ServerEvents
     internal class LeaveGameEvent<GameState, PlayerInput, PlayerUpdate> : ServerEvent<GameState, PlayerInput, PlayerUpdate> where GameState : IGameState<PlayerInput, PlayerUpdate>
     {
         readonly PlayerId playerId;
-        readonly PlayerInputStorage<PlayerUpdate> playerInputStorage;
-        public LeaveGameEvent(PlayerId playerId, PlayerInputStorage<PlayerUpdate> playerInputStorage)
+        readonly TaskCompletionSource gameStateCompletionSource;
+        public LeaveGameEvent(PlayerId playerId, TaskCompletionSource gameStateCompletionSource)
         {
             this.playerId = playerId;
-            this.playerInputStorage = playerInputStorage;
+            this.gameStateCompletionSource = gameStateCompletionSource;
         }
 
 
@@ -22,6 +22,7 @@ namespace GameServerImplementation.ServerEvents
             gameState.RemovePlayer(playerId);
             playerInputStorage.DisposePlayer(playerId);
             playersCommunication.DisposePlayerConnection(playerId);
+            gameStateCompletionSource.SetResult();
         }
     }
 }
