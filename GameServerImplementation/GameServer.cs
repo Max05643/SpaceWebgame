@@ -173,7 +173,7 @@ namespace GameServerImplementation
             }
         }
 
-        PlayerInput IGameController<PlayerUpdate, PlayerInput>.PopPlayerInput(PlayerId playerId)
+        PlayerInput IPlayerInputProvider<PlayerInput>.PopPlayerInput(PlayerId playerId)
         {
             return playerInputStorage.PopPlayerInput(playerId);
         }
