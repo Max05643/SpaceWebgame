@@ -32,13 +32,14 @@ namespace GameDesign.Utils
 
         PlayerInput IPlayerInputProcessor<PlayerInput>.StoreNewInput(PlayerInput storedInput, PlayerInput newInput)
         {
-            var inputToStore = new PlayerInput();
-
-            inputToStore.MovementPower = newInput.MovementPower;
-            inputToStore.Angle = newInput.Angle;
-            inputToStore.IsFiring = newInput.IsFiring;
-            inputToStore.RepairRequest = storedInput.RepairRequest || newInput.RepairRequest;
-            inputToStore.InvestmentRequest = newInput.InvestmentRequest == null ? storedInput.InvestmentRequest : newInput.InvestmentRequest;
+            var inputToStore = new PlayerInput
+            {
+                MovementPower = newInput.MovementPower,
+                Angle = newInput.Angle,
+                IsFiring = newInput.IsFiring,
+                RepairRequest = storedInput.RepairRequest || newInput.RepairRequest,
+                InvestmentRequest = newInput.InvestmentRequest == null ? storedInput.InvestmentRequest : newInput.InvestmentRequest
+            };
 
             return inputToStore;
         }
