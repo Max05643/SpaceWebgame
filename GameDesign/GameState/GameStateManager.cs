@@ -37,9 +37,9 @@ namespace GameDesign.GameState
         }
 
         /// <summary>
-        /// Runs a game update with specified delta time
+        /// Runs a game tick with specified delta time
         /// </summary>
-        void Update(TimeSpan deltaTime, IPlayerInputProvider<PlayerInput> playerInputProvider)
+        void TickGame(TimeSpan deltaTime, IPlayerInputProvider<PlayerInput> playerInputProvider)
         {
             float deltaTimeSeconds = (float)deltaTime.TotalSeconds;
 
@@ -62,9 +62,18 @@ namespace GameDesign.GameState
 
         void IGameState<PlayerInput, PlayerUpdate>.Tick(TimeSpan deltaTime, IGameController<PlayerUpdate, PlayerInput> gameController)
         {
-            Update(deltaTime, gameController);
+            TickGame(deltaTime, gameController);
 
-            TO DO  : Send updates to players
+            if (playersManager.Players.Count == 0)
+                return;
+
+            var basePlayerUpdate = PlayerUpdateFactory.GetBaseUpdateForAllPlayers(this);
+
+            foreach (var player in playersManager.Players)
+            {
+                var personalUpdate = PlayerUpdateFactory.GetPersonalUpdateForPlayer(this, player.Value, basePlayerUpdate);
+                gameController.SendUpdate(personalUpdate, player.Key);
+            }
         }
 
         bool IGameState<PlayerInput, PlayerUpdate>.IsPlayerInGame(Guid playerId)
