@@ -1,0 +1,48 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <ItemGroup>
+    <None Remove="Scripts\audio.ts" />
+    <None Remove="Scripts\game.ts" />
+    <None Remove="Scripts\graphic.ts" />
+    <None Remove="Scripts\inpututils.ts" />
+    <None Remove="Scripts\network.ts" />
+    <None Remove="Scripts\technical.ts" />
+    <None Remove="Scripts\ui.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GameServerDefinitions\GameServerDefinitions.csproj" />
+    <ProjectReference Include="..\GameDesign\GameDesign.csproj" />
+    <ProjectReference Include="..\GameServerImplementation\GameServerImplementation.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+    <Folder Include="ClientModels\" />
+    <Folder Include="Views\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Boxed.Mapping" Version="7.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="8.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.MessagePack" Version="8.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="8.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="Scripts\audio.ts" />
+    <TypeScriptCompile Include="Scripts\game.ts" />
+    <TypeScriptCompile Include="Scripts\graphic.ts" />
+    <TypeScriptCompile Include="Scripts\inpututils.ts" />
+    <TypeScriptCompile Include="Scripts\network.ts" />
+    <TypeScriptCompile Include="Scripts\technical.ts" />
+    <TypeScriptCompile Include="Scripts\ui.ts" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+</Project>

@@ -42,8 +42,8 @@ namespace GameDesign.Models
 
             /// <summary>
             /// Stores special features for some objects:
-            /// - Health (0 to 100) for IHasHealth objects
-            /// - Text for IHasText objects
+            /// - health (0 to 100) for IHasHealth objects
+            /// - text for IHasText objects
             /// </summary>
             public Dictionary<string, string> Features = new Dictionary<string, string>();
 
@@ -78,12 +78,12 @@ namespace GameDesign.Models
                         throw new InvalidOperationException($"Object {gameObject.Name} can not have its IHasHealth displayed, because it has a parent object. Only objects on top of the hierarchy can have their health displayed.");
 
                     var component = gameObject.GetComponent<IHasHealth>();
-                    result.Features["Health"] = ((int)(component.Health / (float)component.MaxHealth * 100f)).ToString();
+                    result.Features["health"] = ((int)(component.Health / (float)component.MaxHealth * 100f)).ToString();
                 }
                 if (gameObject.HasComponent<IHasText>())
                 {
                     var component = gameObject.GetComponent<IHasText>();
-                    result.Features["Text"] = component.Name;
+                    result.Features["text"] = component.Name;
                 }
 
                 if (gameObject.Children.Count > 0)

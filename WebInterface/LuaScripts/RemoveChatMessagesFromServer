@@ -1,0 +1,3 @@
+﻿--Removes all chat messages from specified server
+
+return redis.call('DEL', 'spacewar_chat:server:' .. @gameKey);

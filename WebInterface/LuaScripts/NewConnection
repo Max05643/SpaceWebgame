@@ -1,0 +1,5 @@
+﻿-- Script to add a new connection. Returns null if there was no connection previously. Returns old connection otherwise
+
+local previousValue = redis.call('HGET', 'spacewar_connections:server:' .. @gameKey, @playerKey);
+redis.call('HSET', 'spacewar_connections:server:' .. @gameKey, @playerKey, @connection);
+return previousValue;

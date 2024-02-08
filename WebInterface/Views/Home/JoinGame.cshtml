@@ -1,0 +1,27 @@
+﻿
+<div class="container mt-5">
+    <a href="@Url.Action("Index", "Home")" class="btn btn-secondary mb-3">Back</a>
+    @{
+        ViewData["Title"] = "Join game page";
+    }
+
+    <div>
+        <p class="lead">Join the game</p>
+        <form asp-antiforgery="true" method="post" id="join-form">
+
+            <div class="mb-3">
+                <captcha />
+            </div>
+
+            <button class="btn btn-primary" type="submit">
+                Join the game
+            </button>
+
+        </form>
+
+        <div class="text-danger mt-3">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        </div>
+    </div>
+</div>
+

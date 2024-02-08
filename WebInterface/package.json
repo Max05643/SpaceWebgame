@@ -1,0 +1,35 @@
+{
+  "name": "WebInterface",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "clean:js": "rimraf wwwroot/js",
+    "webpack:build": "npm run clean:js && webpack"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "rimraf": "^5.0.5",
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.3.2",
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.4"
+  },
+  "dependencies": {
+    "@microsoft/signalr": "^8.0.0",
+    "@microsoft/signalr-protocol-msgpack": "^8.0.0",
+    "@pixi/sound": "^5.2.2",
+    "axios": "^1.6.2",
+    "pixi.js": "^7.3.2"
+  },
+  "-vs-binding": {
+    "BeforeBuild": [
+      "webpack:build"
+    ],
+    "Clean": [
+      "clean:js"
+    ]
+  }
+}

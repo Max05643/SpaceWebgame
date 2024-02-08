@@ -1,0 +1,3 @@
+﻿-- Script to get all connections from specified game (from all players in that game)
+
+return redis.call('HVALS', 'spacewar_connections:server:' .. @gameKey);

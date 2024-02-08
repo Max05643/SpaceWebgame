@@ -1,0 +1,3 @@
+﻿-- Script to delete a specified element from "games"
+
+return redis.call('DEL', 'spacewar_connections:server:' .. @gameKey);

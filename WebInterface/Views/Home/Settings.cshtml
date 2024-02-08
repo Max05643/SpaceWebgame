@@ -1,0 +1,25 @@
+﻿@{
+    ViewData["Title"] = "Settings";
+}
+
+<div class="container mt-5">
+    <a href="@Url.Action("Index", "Home")" class="btn btn-secondary mb-3">Back</a>
+
+
+    <div>
+        <h1>Game settings</h1>
+        <div class="mb-3">
+            <label for="music_vol">Music volume</label>
+            <input id="music_vol" name="music_vol" type="range" class="form-range" min="0" max="1" step="0.01" />
+        </div>
+        <div class="mb-3">
+            <label for="sound_vol">Sound volume</label>
+            <input id="sound_vol" name="sound_vol" type="range" class="form-range" min="0" max="1" step="0.01" />
+        </div>
+    </div>
+</div>
+
+@section Scripts
+    {
+    <script src="~/js/settings.js" asp-append-version="true"></script>
+}

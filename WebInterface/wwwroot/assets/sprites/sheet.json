@@ -1,0 +1,300 @@
+{"frames": {
+
+"asteroid/damaged/asteroid0.png":
+{
+	"frame": {"x":178,"y":74,"w":100,"h":100},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":100,"h":100},
+	"sourceSize": {"w":100,"h":100},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"asteroid/damaged/asteroid1.png":
+{
+	"frame": {"x":288,"y":74,"w":100,"h":100},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":100,"h":100},
+	"sourceSize": {"w":100,"h":100},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"asteroid/damaged/asteroid2.png":
+{
+	"frame": {"x":398,"y":74,"w":100,"h":100},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":100,"h":100},
+	"sourceSize": {"w":100,"h":100},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"asteroid/damaged/asteroid3.png":
+{
+	"frame": {"x":508,"y":74,"w":100,"h":100},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":100,"h":100},
+	"sourceSize": {"w":100,"h":100},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"asteroid/damaged/asteroid4.png":
+{
+	"frame": {"x":618,"y":74,"w":100,"h":100},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":100,"h":100},
+	"sourceSize": {"w":100,"h":100},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"asteroid/damaged/asteroid5.png":
+{
+	"frame": {"x":728,"y":74,"w":100,"h":100},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":100,"h":100},
+	"sourceSize": {"w":100,"h":100},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"asteroid/destroy/asteroid0.png":
+{
+	"frame": {"x":838,"y":74,"w":100,"h":100},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":100,"h":100},
+	"sourceSize": {"w":100,"h":100},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"asteroid/destroy/asteroid1.png":
+{
+	"frame": {"x":0,"y":184,"w":100,"h":100},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":100,"h":100},
+	"sourceSize": {"w":100,"h":100},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"asteroid/destroy/asteroid2.png":
+{
+	"frame": {"x":110,"y":184,"w":100,"h":100},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":100,"h":100},
+	"sourceSize": {"w":100,"h":100},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"asteroid/idle/asteroid.png":
+{
+	"frame": {"x":220,"y":184,"w":100,"h":100},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":100,"h":100},
+	"sourceSize": {"w":100,"h":100},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"black_hole/hole.png":
+{
+	"frame": {"x":74,"y":74,"w":94,"h":51},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":94,"h":51},
+	"sourceSize": {"w":94,"h":51},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"crystal/idle/crystal0.png":
+{
+	"frame": {"x":660,"y":0,"w":64,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
+	"sourceSize": {"w":64,"h":64},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"crystal/idle/crystal1.png":
+{
+	"frame": {"x":734,"y":0,"w":64,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
+	"sourceSize": {"w":64,"h":64},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"crystal/idle/crystal2.png":
+{
+	"frame": {"x":808,"y":0,"w":64,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
+	"sourceSize": {"w":64,"h":64},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"crystal/idle/crystal3.png":
+{
+	"frame": {"x":0,"y":74,"w":64,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
+	"sourceSize": {"w":64,"h":64},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"player/destroy/player0.png":
+{
+	"frame": {"x":0,"y":0,"w":50,"h":50},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":50,"h":50},
+	"sourceSize": {"w":50,"h":50},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"player/destroy/player1.png":
+{
+	"frame": {"x":60,"y":0,"w":50,"h":50},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":50,"h":50},
+	"sourceSize": {"w":50,"h":50},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"player/destroy/player2.png":
+{
+	"frame": {"x":120,"y":0,"w":50,"h":50},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":50,"h":50},
+	"sourceSize": {"w":50,"h":50},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"player/movement/player0.png":
+{
+	"frame": {"x":180,"y":0,"w":50,"h":50},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":50,"h":50},
+	"sourceSize": {"w":50,"h":50},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"player/movement/player1.png":
+{
+	"frame": {"x":240,"y":0,"w":50,"h":50},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":50,"h":50},
+	"sourceSize": {"w":50,"h":50},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"player/movement/player2.png":
+{
+	"frame": {"x":300,"y":0,"w":50,"h":50},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":50,"h":50},
+	"sourceSize": {"w":50,"h":50},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"player/movement_invincible/player0.png":
+{
+	"frame": {"x":360,"y":0,"w":50,"h":50},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":50,"h":50},
+	"sourceSize": {"w":50,"h":50},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"player/movement_invincible/player1.png":
+{
+	"frame": {"x":420,"y":0,"w":50,"h":50},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":50,"h":50},
+	"sourceSize": {"w":50,"h":50},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"player/movement_invincible/player2.png":
+{
+	"frame": {"x":480,"y":0,"w":50,"h":50},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":50,"h":50},
+	"sourceSize": {"w":50,"h":50},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"player/nomovement/player_no_movement.png":
+{
+	"frame": {"x":540,"y":0,"w":50,"h":50},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":50,"h":50},
+	"sourceSize": {"w":50,"h":50},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"player/nomovement_invincible/player_no_movement.png":
+{
+	"frame": {"x":600,"y":0,"w":50,"h":50},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":50,"h":50},
+	"sourceSize": {"w":50,"h":50},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"shot/shot0.png":
+{
+	"frame": {"x":596,"y":184,"w":300,"h":133},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":300,"h":133},
+	"sourceSize": {"w":300,"h":133},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"shot/shot1.png":
+{
+	"frame": {"x":0,"y":450,"w":300,"h":133},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":300,"h":133},
+	"sourceSize": {"w":300,"h":133},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"shot/shot2.png":
+{
+	"frame": {"x":310,"y":450,"w":300,"h":133},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":300,"h":133},
+	"sourceSize": {"w":300,"h":133},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"shot/shot3.png":
+{
+	"frame": {"x":620,"y":450,"w":300,"h":133},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":300,"h":133},
+	"sourceSize": {"w":300,"h":133},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"space_station/space_station.png":
+{
+	"frame": {"x":330,"y":184,"w":256,"h":256},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":256,"h":256},
+	"sourceSize": {"w":256,"h":256},
+	"anchor": {"x":0.5,"y":0.5}
+}},
+"animations": {
+	"damaged/asteroid": ["asteroid/damaged/asteroid0.png","asteroid/damaged/asteroid1.png","asteroid/damaged/asteroid2.png","asteroid/damaged/asteroid3.png","asteroid/damaged/asteroid4.png","asteroid/damaged/asteroid5.png"],
+	"destroy/asteroid": ["asteroid/destroy/asteroid0.png","asteroid/destroy/asteroid1.png","asteroid/destroy/asteroid2.png"],
+	"idle/crystal": ["crystal/idle/crystal0.png","crystal/idle/crystal1.png","crystal/idle/crystal2.png","crystal/idle/crystal3.png"],
+	"destroy/player": ["player/destroy/player0.png","player/destroy/player1.png","player/destroy/player2.png"],
+	"movement/player": ["player/movement/player0.png","player/movement/player1.png","player/movement/player2.png"],
+	"movement_invincible/player": ["player/movement_invincible/player0.png","player/movement_invincible/player1.png","player/movement_invincible/player2.png"],
+	"shot/shot": ["shot/shot0.png","shot/shot1.png","shot/shot2.png","shot/shot3.png"]
+},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.1",
+	"image": "sheet.png",
+	"format": "RGBA8888",
+	"size": {"w":938,"h":583},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:e579f0ad3f95c1d7492faf31c729c0b1:5d72fed1a7984a596ac5161f303fb7d7:9c44ecd7e9a522007eaff2949095bc1d$"
+}
+}

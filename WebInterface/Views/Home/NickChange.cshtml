@@ -1,0 +1,24 @@
+﻿@model string
+
+@{
+    ViewData["Title"] = "Nick changing page";
+}
+
+<div class="container mt-5">
+    <a href="@Url.Action("Index", "Home")" class="btn btn-secondary mb-3">Back</a>
+
+
+    <div>
+        <div>
+            @Html.ValidationSummary(false)
+        </div>
+        <form asp-action="NickChange" asp-controller="Home" asp-antiforgery="true" method="post">
+            <h1>Change your nickname</h1>
+            <div class="mb-3">
+                <label for="nick">Current nickname</label>
+                <input id="nick" name="nick" type="text" class="form-control" value="@Model" />
+            </div>
+            <button id="setnick" class="btn btn-primary">Change</button>
+        </form>
+    </div>
+</div>

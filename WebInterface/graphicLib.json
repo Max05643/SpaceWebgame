@@ -1,0 +1,91 @@
+﻿{
+  "None": {
+    "Type": 0
+  },
+  "SpaceStation": {
+    "Type": 1,
+    "SpriteInfo": {
+      "Sprite": "space_station/space_station.png"
+    }
+  },
+  "BlackHole": {
+    "Type": 1,
+    "SpriteInfo": {
+      "Sprite": "black_hole/hole.png"
+    }
+  },
+  "Crystal": {
+    "Type": 2,
+    "AnimatedSpriteInfo": {
+      "AnimationName": "idle/crystal",
+      "TargetTimeInSeconds": 1,
+      "IsLoop": true
+    }
+  },
+  "Projectile": {
+    "Type": 2,
+    "AnimatedSpriteInfo": {
+      "AnimationName": "shot/shot",
+      "TargetTimeInSeconds": 1,
+      "IsLoop": true
+    }
+  },
+  "PlayerNomovement": {
+    "Type": 1,
+    "SpriteInfo": {
+      "Sprite": "player/nomovement/player_no_movement.png"
+    }
+  },
+  "PlayerDestroy": {
+    "Type": 2,
+    "AnimatedSpriteInfo": {
+      "AnimationName": "destroy/player",
+      "TargetTimeInSeconds": 0.5,
+      "IsLoop": false
+    }
+  },
+  "PlayerMovement": {
+    "Type": 2,
+    "AnimatedSpriteInfo": {
+      "AnimationName": "movement/player",
+      "TargetTimeInSeconds": 0.7,
+      "IsLoop": true
+    }
+  },
+  "PlayerMovementInvincible": {
+    "Type": 2,
+    "AnimatedSpriteInfo": {
+      "AnimationName": "movement_invincible/player",
+      "TargetTimeInSeconds": 0.7,
+      "IsLoop": true
+    }
+  },
+  "PlayerNomovementInvincible": {
+    "Type": 1,
+    "SpriteInfo": {
+      "Sprite": "player/nomovement_invincible/player_no_movement.png"
+    }
+  },
+  "AsteroidIdle": {
+    "Type": 1,
+    "SpriteInfo": {
+      "Sprite": "asteroid/idle/asteroid.png"
+    }
+  },
+  "AsteroidDestroy": {
+    "Type": 2,
+    "AnimatedSpriteInfo": {
+      "AnimationName": "destroy/asteroid",
+      "TargetTimeInSeconds": 0.5,
+      "IsLoop": false
+    }
+  },
+  "AsteroidDamaged": {
+    "Type": 2,
+    "AnimatedSpriteInfo": {
+      "AnimationName": "damaged/asteroid",
+      "TargetTimeInSeconds": 0.2,
+      "IsLoop": false
+    }
+  }
+}

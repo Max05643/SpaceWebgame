@@ -1,0 +1,15 @@
+﻿-- Adds new message to specified server. Removes old messages if there are more than 15 of them
+
+local setName = 'spacewar_chat:server:' .. @gameKey
+local count = redis.call('ZCOUNT', setName, '-inf', '+inf')
+
+if count > tonumber(@maxMessagesPerChatStored) - 1 then
+    redis.call('ZMPOP', 1, setName, 'MIN')
+end
+
+if count == 0 then
+    redis.call('ZADD', setName, 1, @message)
+else
+    local newHighestScore = tonumber(redis.call('ZREVRANGE', setName, 0, 0, 'WITHSCORES')[2]) + 1
+    redis.call('ZADD', setName, newHighestScore, @message)
+end

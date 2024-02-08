@@ -1,0 +1,30 @@
+﻿@{
+    ViewData["Title"] = "Admin panel";
+}
+
+<table id="servers-table" class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Players</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+<div class="m-10 containerk">
+    <div id="startgamebutton" class="btn btn-success">Start new game</div>
+    <div id="stopgamebutton" class="btn btn-danger">Stop the game</div>
+</div>
+
+<form asp-action="ApplyMapToGame" asp-controller="Admin" asp-antiforgery="true" id="applymapform" method="post" enctype="multipart/form-data">
+    <input value="" id="gameidapplymapform" name="gameId" type="hidden">
+    <input type="file" name="mapFile">
+    <button class="btn btn-info">Apply map</button>
+</form>
+
+@section Scripts
+    {
+    <script src="~/js/admin.js" asp-append-version="true"></script>
+}

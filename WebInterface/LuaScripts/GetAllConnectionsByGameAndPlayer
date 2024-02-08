@@ -1,0 +1,3 @@
+﻿-- Script to get the connection from specified game and player
+
+return redis.call('HGET', 'spacewar_connections:server:' .. @gameKey, @playerKey);

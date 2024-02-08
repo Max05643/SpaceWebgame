@@ -1,0 +1,11 @@
+﻿--Returns all chat messages from specified server that have ids bigger than specified
+local setName = 'spacewar_chat:server:' .. @gameKey
+local threshold = tonumber(@id) or 0
+
+local result = redis.call('ZRANGEBYSCORE', setName, threshold, '+inf', 'WITHSCORES')
+
+if #result > 0 then
+    return result
+else
+    return nil
+end

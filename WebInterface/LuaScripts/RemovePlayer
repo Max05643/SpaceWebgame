@@ -1,0 +1,3 @@
+﻿-- Script to remove a specified player (and all his connections) from specified game
+
+return redis.call('HDEL', 'spacewar_connections:server:' .. @gameKey, @playerKey);
