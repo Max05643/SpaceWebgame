@@ -37,40 +37,5 @@ namespace GameDesign.Models
         /// Can be false, if there is no request on this frame
         /// </summary>
         public bool RepairRequest { get; set; } = false;
-
-
-        /// <summary>
-        /// Updates this instance accordingly to new information
-        /// </summary>
-        public void Update(PlayerInput newInput)
-        {
-            MovementPower = newInput.MovementPower;
-            Angle = newInput.Angle;
-            IsFiring = newInput.IsFiring;
-            if (newInput.InvestmentRequest != null)
-                InvestmentRequest = newInput.InvestmentRequest;
-            RepairRequest |= newInput.RepairRequest;
-        }
-
-        /// <summary>
-        /// Removes the information about instant commands from this instance and returns the copy of it with that information
-        /// </summary>
-        public PlayerInput RemoveInstantInformation()
-        {
-
-            var res = new PlayerInput()
-            {
-                MovementPower = MovementPower,
-                Angle = Angle,
-                IsFiring = IsFiring,
-                InvestmentRequest = InvestmentRequest,
-                RepairRequest = RepairRequest
-            };
-
-            RepairRequest = false;
-            InvestmentRequest = null;
-
-            return res;
-        }
     }
 }
