@@ -31,7 +31,7 @@ export namespace Network {
 
         /** Initializes the connection */
         async InitializeServerConnection(personalInfoHandler: (message: GameDesign.ClientGameState) => void): Promise<void> {
-            this.connection.on("ReceivePerosnalInfo", (message) => {
+            this.connection.on("ReceiveGameState", (message) => {
                 if (this.mapper.isReady) {
                     const result = this.mapper.mapClientPersonalInfoFromServer(message) as GameDesign.ClientGameState;
                     personalInfoHandler(result);

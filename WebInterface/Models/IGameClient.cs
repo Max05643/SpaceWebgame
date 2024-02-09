@@ -1,4 +1,4 @@
-﻿using GameServer.Models.ClientModels;
+﻿using WebInterface.ClientModels;
 
 namespace WebInterface.Models
 {
@@ -7,7 +7,7 @@ namespace WebInterface.Models
     /// </summary>
     public interface IGameClient
     {
-        Task ReceivePerosnalInfo(ClientPersonalInfo clientPersonalInfo);
+        Task ReceiveGameState(ClientGameState clienGameState);
 
         Task ReceiveRemovalFromGameNotification();
     }

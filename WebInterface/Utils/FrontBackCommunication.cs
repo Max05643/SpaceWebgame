@@ -1,10 +1,9 @@
-﻿using GameDesign.GameMaps;
+﻿using Boxed.Mapping;
+using GameDesign.GameState;
 using GameDesign.Models;
-using GameServer.Models.ClientModels;
-using GameServersManager.Models;
-using Genbox.VelcroPhysics.Dynamics.Solver;
+using GameServerDefinitions;
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.Xna.Framework;
+using WebInterface.ClientModels;
 using WebInterface.Hubs;
 using WebInterface.Models;
 
@@ -13,60 +12,33 @@ namespace WebInterface.Utils
     /// <summary>
     /// Connects SingalR + Controllers and GameServersManager
     /// </summary>
-    public class FrontBackCommunication : IMultiServerClientsCommunication
+    public class FrontBackCommunication : IPlayersCommunication<PlayerUpdate>
     {
 
-
         readonly IPlayersConnectionsStorage playersConnectionsStorage;
-        readonly IServiceProvider serviceProvider;
+        readonly IMapper<PlayerUpdate, ClientGameState> gameStateMapper;
+        readonly IMapper<ClientInput, PlayerInput> inputMapper;
+        readonly IGameServer<GameStateManager, PlayerInput, PlayerUpdate> gameServer;
+        readonly IHubContext<GameHub, IGameClient> hubContext;
 
-        IGameServersManager? gameServersManager = null;
-        IGameServersManager IGameServersManager
+        public FrontBackCommunication(IHubContext<GameHub, IGameClient> hubContext, IPlayersConnectionsStorage playersConnectionsStorage, IMapper<PlayerUpdate, ClientGameState> gameStateMapper, IMapper<ClientInput, PlayerInput> inputMapper, IGameServer<GameStateManager, PlayerInput, PlayerUpdate> gameServer)
         {
-            get
-            {
-                if (gameServersManager == null)
-                    gameServersManager = serviceProvider.GetRequiredService<IGameServersManager>();
-
-                return gameServersManager;
-            }
-        }
-
-        async Task IMultiServerClientsCommunication.SendClientPersonalInfo(ClientPersonalInfo clientPersonalInfo, Guid serverId, Guid playerId)
-        {
-            var playersConnection = await playersConnectionsStorage.GetPlayersConnection(serverId.ToString(), playerId.ToString());
-
-            if (playersConnection != null)
-                await hubContext.Clients.Client(playersConnection).ReceivePerosnalInfo(clientPersonalInfo);
-        }
-
-        async Task IMultiServerClientsCommunication.PlayerIsRemovedFromGame(Guid serverId, Guid playerId)
-        {
-            var playersConnection = await playersConnectionsStorage.GetPlayersConnection(serverId.ToString(), playerId.ToString());
-
-            if (playersConnection != null)
-            {
-                await hubContext.Clients.Client(playersConnection).ReceiveRemovalFromGameNotification();
-            }
-            
-            await playersConnectionsStorage.RemovePlayer(serverId.ToString(), playerId.ToString());
-        }
-
-        async Task IMultiServerClientsCommunication.ServerIsStopped(Guid serverId)
-        {
-            await hubContext.Clients.Clients(await playersConnectionsStorage.GetAllConnections(serverId.ToString())).ReceiveRemovalFromGameNotification();
-            await playersConnectionsStorage.RemoveGame(serverId.ToString());
+            this.hubContext = hubContext;
+            this.playersConnectionsStorage = playersConnectionsStorage;
+            this.gameStateMapper = gameStateMapper;
+            this.inputMapper = inputMapper;
+            this.gameServer = gameServer;
         }
 
         /// <summary>
         /// Stores specified connection id in storage if player is in specified game.
-        /// Stops the current connection with player if exists
+        /// Stops existing connection with player if exists
         /// </summary>
-        public async Task SubscribeToUpdates(Guid serverId, Guid playerId, string connectionId)
+        public async Task SubscribeToUpdates(PlayerId playerId, string connectionId)
         {
-            if (await CheckIfPlayerInGame(serverId, playerId))
+            if (await gameServer.IsPlayerInGame(playerId))
             {
-                var prevConnection = await playersConnectionsStorage.SwitchConnection(serverId.ToString(), playerId.ToString(), connectionId);
+                var prevConnection = await playersConnectionsStorage.SwitchConnection(playerId.ToString(), connectionId);
 
                 if (prevConnection != null)
                 {
@@ -75,129 +47,82 @@ namespace WebInterface.Utils
             }
         }
 
-
-        IHubContext<GameHub, IGameClient> hubContext;
-        public FrontBackCommunication(IHubContext<GameHub, IGameClient> hubContext, IPlayersConnectionsStorage playersConnectionsStorage, IServiceProvider serviceProvider)
-        {
-            this.hubContext = hubContext;
-            this.playersConnectionsStorage = playersConnectionsStorage;
-            this.serviceProvider = serviceProvider;
-        }
-
-
         /// <summary>
         /// Returns all the messages with ids greater than the argument (may return zero messages)
         /// </summary>
-        public virtual async Task<ICollection<ChatMessageConainer>?> GetChatMessages(Guid serverId, Guid playerId, long id)
+        public async Task<IEnumerable<ChatMessageConainer>> GetChatMessages(PlayerId playerId, long id)
         {
-
-            if (await CheckIfPlayerInGame(serverId, playerId))
-                return await IGameServersManager.GetChatMessages(serverId, id);
-            else
-                return null;
+            return Enumerable.Empty<ChatMessageConainer>();
         }
-
 
         /// <summary>
         /// Adds new message to chat. Returns true if successfully added
         /// </summary>
-        public virtual async Task<bool> AddNewChatMessage(Guid serverId, ChatMessage message)
+        public async Task<bool> AddNewChatMessage(ChatMessage message)
         {
-            if (await CheckIfPlayerInGame(serverId, message.SenderId))
-                return await IGameServersManager.AddNewChatMessage(serverId, message);
-            else
-                return false;
-        }
-
-
-
-
-        /// <summary>
-        /// Current games' ids
-        /// </summary>
-        public virtual ICollection<Guid> GetCurrentGames()
-        {
-            return IGameServersManager.GetCurrentGames();
-        }
-        /// <summary>
-        /// Stops the game and removes it from list of existing games. Returns false if it does not exist
-        /// </summary>
-        public virtual Task StopTheGame(Guid serverId)
-        {
-            return IGameServersManager.StopTheGame(serverId);
-        }
-
-
-        /// <summary>
-        /// Returns the number of players in a game. Will return null if server is stopped or does not exist
-        /// </summary>
-        public virtual Task<int?> GetCurrentPlayersCount(Guid serverId)
-        {
-            return IGameServersManager.GetCurrentPlayersCount(serverId);
+            return false;
         }
 
         /// <summary>
-        /// Starts new game
+        /// Adds player to the game. Returns true if player added or already in the game
         /// </summary>
-        public virtual Task<Guid?> StartTheGame(GameServerSettings gameServerSettings)
+        public Task<bool> JoinGame(PlayerId playerId)
         {
-            return IGameServersManager.CreateNewGameServer(gameServerSettings);
+            return gameServer.AddPlayer(playerId);
         }
 
         /// <summary>
-        /// Adds player to the game. Returns false if operation is impossible
+        /// Removes player from the game without notification
         /// </summary>
-        public virtual Task<bool> JoinGame(Guid serverId, Guid playerId, string nick)
+        public Task LeaveGame(PlayerId playerId)
         {
-            return IGameServersManager.JoinGame(serverId, playerId, nick);
-        }
-        /// <summary>
-        /// Removes player from the game. Returns false if operation is impossible
-        /// </summary>
-        public virtual Task<bool> RemovePlayer(Guid serverId, Guid playerId)
-        {
-            return IGameServersManager.RemovePlayer(serverId, playerId);
+            return gameServer.LeaveGame(playerId);
         }
 
-        /// <summary>
-        /// Checks if player is in game. Returns false if game does not exist
-        /// </summary>
-        public virtual Task<bool> CheckIfPlayerInGame(Guid serverId, Guid playerId)
-        {
-            return IGameServersManager.CheckIfPlayerInGame(serverId, playerId);
-        }
-        
-        /// <summary>
-        /// Checks if game with specified id exists
-        /// </summary>
-        public virtual Task<bool> CheckIfGameExists(Guid serverId)
-        {
-            return IGameServersManager.CheckIfGameExists(serverId);
-        }
-
-
-        /// <summary>
-        /// Adds game objects from the specified map to game scene
-        /// </summary>
-        public virtual Task<bool> ApplyMap(Guid serverId, GameMap map)
-        {
-            return IGameServersManager.ApplyMap(serverId, map);
-        }
-
-        /// <summary>
-        /// Revives the player. Returns false if operation is impossible
-        /// </summary>
-        public virtual Task<bool> Revive(Guid serverId, Guid playerId)
-        {
-            return IGameServersManager.Revive(serverId, playerId);
-        }
         /// <summary>
         /// Sends player's input to the server. Does nothing if operation is impossible
         /// </summary>
-        public virtual Task SendInput(Guid serverId, Guid playerId, PlayerInput playerInput)
+        public void SendInput(PlayerId playerId, PlayerInput playerInput)
         {
-            return IGameServersManager.SendInput(serverId, playerId, playerInput);
+            gameServer.AcceptPlayerInput(playerInput, playerId);
         }
 
+
+        async Task SendUpdate(PlayerUpdate update, PlayerId playerId)
+        {
+            var connectionId = await playersConnectionsStorage.GetPlayersConnection(playerId.ToString());
+
+            if (connectionId == null)
+                return;
+
+            ClientGameState clientGameState = gameStateMapper.Map(update);
+
+            await hubContext.Clients.Client(connectionId).ReceiveGameState(clientGameState);
+        }
+
+        void IPlayersCommunication<PlayerUpdate>.SendUpdate(PlayerUpdate update, PlayerId playerId)
+        {
+            Task.Run(() => SendUpdate(update, playerId));
+        }
+
+        async Task NotifyPlayerThatHeIsKicked(PlayerId playerId)
+        {
+            var connectionId = await playersConnectionsStorage.GetPlayersConnection(playerId.ToString());
+
+            if (connectionId == null)
+                return;
+
+            await hubContext.Clients.Client(connectionId).ReceiveRemovalFromGameNotification();
+        }
+
+        void IPlayersCommunication<PlayerUpdate>.NotifyPlayerThatHeIsKicked(PlayerId playerId)
+        {
+            Task.Run(() => NotifyPlayerThatHeIsKicked(playerId));
+        }
+
+        void IPlayersCommunication<PlayerUpdate>.DisposePlayerConnection(PlayerId playerId)
+        {
+            playersConnectionsStorage.RemovePlayer(playerId.ToString());
+        }
     }
 }

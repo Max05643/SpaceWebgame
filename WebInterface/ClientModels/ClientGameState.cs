@@ -42,14 +42,14 @@ namespace WebInterface.ClientModels
         /// Represents game objects indexed by their ids
         /// </summary>
         [Key("_js")]
-        public Dictionary<string, ClientGameObject> Objects { get; set; }
+        public Dictionary<string, ClientGameObject>? Objects { get; set; }
 
         /// <summary>
         /// Represents sounds that should be played one time on frontend. They are sent to player during several frames to front drops.
         /// They are always ordered by their ids increasing
         /// </summary>
         [Key("_seq")]
-        public List<ClientSoundEffect> SoundEffectsQueue { get; set; }
+        public List<ClientSoundEffect>? SoundEffectsQueue { get; set; }
 
         /// <summary>
         /// Id of the object controlled by player. Can be null
@@ -79,7 +79,7 @@ namespace WebInterface.ClientModels
         /// Information about already invested points per caregory
         /// </summary>
         [Key("_inv")]
-        public Dictionary<PlayerInvestmentState.InvestmentType, int>? AlreadyInvested { get; set; } = null;
+        public Dictionary<PlayerInvestmentState.InvestmentType, int>? AlreadyInvested { get; set; }
 
         /// <summary>
         /// Player's health
@@ -93,11 +93,5 @@ namespace WebInterface.ClientModels
         [Key("_mh")]
         public int MaxHealth { get; set; } = 0;
 
-        public ClientGameState(Dictionary<string, ClientGameObject> objects, List<ClientSoundEffect> soundEffectsQueue, int playersCount)
-        {
-            Objects = objects;
-            SoundEffectsQueue = soundEffectsQueue;
-            PlayersCount = playersCount;
-        }
     }
 }

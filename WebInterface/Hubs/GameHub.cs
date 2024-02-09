@@ -1,8 +1,4 @@
-﻿using GameDesign.Models;
-using GameServer.Models.ClientModels;
-using GameServersManager.Models;
-using Genbox.VelcroPhysics.Shared;
-using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.SignalR;
 using WebInterface.Models;
 using WebInterface.Utils;
 

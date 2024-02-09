@@ -30,12 +30,12 @@ namespace WebInterface.Utils
             }
         }
 
-        async Task<string?> IPlayersConnectionsStorage.SwitchConnection(string gameKey, string playerKey, string connection)
+        async Task<string?> IPlayersConnectionsStorage.SwitchConnection(string playerKey, string connection)
         {
             try
             {
                 var redisClient = connectionMultiplexer.GetDatabase();
-                var args = new { gameKey = (RedisKey)gameKey, playerKey = (RedisKey)playerKey, connection };
+                var args = new { gameKey = (RedisKey)"spacewar", playerKey = (RedisKey)playerKey, connection };
                 var result = await redisClient.ScriptEvaluateAsync(scriptsPrepared["NewConnection"], args);
 
                 if (result == null || result.IsNull)
@@ -54,12 +54,12 @@ namespace WebInterface.Utils
             }
         }
 
-        async Task<string?> IPlayersConnectionsStorage.GetPlayersConnection(string gameKey, string playerKey)
+        async Task<string?> IPlayersConnectionsStorage.GetPlayersConnection(string playerKey)
         {
             try
             {
                 var redisClient = connectionMultiplexer.GetDatabase();
-                var args = new { gameKey = (RedisKey)gameKey, playerKey = (RedisKey)playerKey };
+                var args = new { gameKey = (RedisKey)"spacewar", playerKey = (RedisKey)playerKey };
                 var result = await redisClient.ScriptEvaluateAsync(scriptsPrepared["GetAllConnectionsByGameAndPlayer"], args);
 
                 if (result == null || result.IsNull)
@@ -78,12 +78,12 @@ namespace WebInterface.Utils
             }
         }
 
-        async Task<List<string>> IPlayersConnectionsStorage.GetAllConnections(string gameKey)
+        async Task<List<string>> IPlayersConnectionsStorage.GetAllConnections()
         {
             try
             {
                 var redisClient = connectionMultiplexer.GetDatabase();
-                var args = new { gameKey = (RedisKey)gameKey };
+                var args = new { gameKey = (RedisKey)"spacewar" };
                 var result = await redisClient.ScriptEvaluateAsync(scriptsPrepared["GetAllConnectionsByGame"], args);
                 var connections = ((RedisResult[])result)!.Select(r => r.ToString()).ToList();
 
@@ -96,26 +96,12 @@ namespace WebInterface.Utils
             }
         }
 
-        async Task IPlayersConnectionsStorage.RemoveGame(string gameKeyToDelete)
+        async Task IPlayersConnectionsStorage.RemovePlayer(string playerKeyToRemove)
         {
             try
             {
                 var redisClient = connectionMultiplexer.GetDatabase();
-                var args = new { gameKey = (RedisKey)gameKeyToDelete };
-                var result = await redisClient.ScriptEvaluateAsync(scriptsPrepared["RemoveGame"], args);
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex.ToString());
-            }
-        }
-
-        async Task IPlayersConnectionsStorage.RemovePlayer(string gameKey, string playerKeyToRemove)
-        {
-            try
-            {
-                var redisClient = connectionMultiplexer.GetDatabase();
-                var args = new { gameKey = (RedisKey)gameKey, playerKey = (RedisKey)playerKeyToRemove };
+                var args = new { gameKey = (RedisKey)"spacewar", playerKey = (RedisKey)playerKeyToRemove };
                 var result = await redisClient.ScriptEvaluateAsync(scriptsPrepared["RemovePlayer"], args);
             }
             catch (Exception ex)

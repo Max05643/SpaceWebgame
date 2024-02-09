@@ -1,5 +1,4 @@
-﻿using GameDesign.Models;
-using GameDesign.Utils;
+﻿using GameDesign.Utils;
 using Microsoft.AspNetCore.Mvc;
 using WebInterface.Utils;
 

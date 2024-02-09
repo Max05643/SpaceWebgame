@@ -6,29 +6,25 @@
     public interface IPlayersConnectionsStorage
     {
         /// <summary>
-        /// Adds new connection for specified player in a specified game.
-        /// Returns null if there was no connection previously. Returns previous connection id if existed for specified game and player
+        /// Adds new connection for specified player.
+        /// Returns null if there was no connection previously. Returns previous connection id if existed for specified player
         /// </summary>
-        Task<string?> SwitchConnection(string serverId, string playerId, string connection);
+        Task<string?> SwitchConnection(string playerId, string connection);
 
 
         /// <summary>
-        /// Returns connection associated with serverId and playerId or null if there is no one
+        /// Returns connection associated with playerId or null if there is no one
         /// </summary>
-        Task<string?> GetPlayersConnection(string serverId, string playerId);
+        Task<string?> GetPlayersConnection(string playerId);
+        
         /// <summary>
-        /// Returns all connections associated with specified serverId
+        /// Returns all connections
         /// </summary>
-        Task<List<string>> GetAllConnections(string serverId);
+        Task<List<string>> GetAllConnections();
 
         /// <summary>
-        /// Removes specified server by serverId
+        /// Removes the connection of specified player
         /// </summary>
-        Task RemoveGame(string serverId);
-
-        /// <summary>
-        /// Removes all connection of specifided player from specified server
-        /// </summary>
-        Task RemovePlayer(string serverId, string playerId);
+        Task RemovePlayer(string playerId);
     }
 }

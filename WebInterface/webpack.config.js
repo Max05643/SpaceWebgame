@@ -3,7 +3,6 @@ const path = require('path');
 module.exports = {
     entry: {
         game: './Scripts/gamepage.ts',
-        admin: './Scripts/admin.ts',
         settings: './Scripts/settings.ts'
     },
     mode: 'production',
