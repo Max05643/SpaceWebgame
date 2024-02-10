@@ -13,7 +13,6 @@ export namespace Game {
     export class GameInstance {
 
         playerId: string;
-        serverId: string;
 
         serverConnection: Network.ServerConnection;
         technicalInfo: Technical.TechnicalInfo = new Technical.TechnicalInfo();
@@ -25,9 +24,8 @@ export namespace Game {
         chatController: UI.ChatController;
 
 
-        constructor(playerId: string, serverId: string, document: Document) {
+        constructor(playerId: string, document: Document) {
             this.playerId = playerId;
-            this.serverId = serverId;
             this.gameUI = new UI.GameUI(document.getElementById("revivebutton") as HTMLButtonElement,
                 document.getElementById("revivemessage") as HTMLDivElement,
                 document.getElementById("debugmessage") as HTMLParagraphElement,
@@ -37,7 +35,7 @@ export namespace Game {
                 document.getElementById("damage-effect") as HTMLTableElement
             );
 
-            this.serverConnection = new Network.ServerConnection("/gamehub", serverId);
+            this.serverConnection = new Network.ServerConnection("/gamehub");
             this.keyboardInputHandler = new InputUtils.KeyboardInputHandler(document);
             this.scene = new Graphic.GameScene(document, () => this.MainLoop(), 30,
                 document.getElementById("progress-bar-sample") as HTMLDivElement);
@@ -110,10 +108,17 @@ export namespace Game {
                 return;
             }
 
-            this.gameUI.RepaintReviveInterface(this.lastProcessedGameState, () => { this.serverConnection.Revive(); });
+            this.gameUI.RepaintReviveInterface(this.lastProcessedGameState);
             this.gameUI.RepaintDamageEffects(this.lastProcessedGameState);
             this.gameUI.RepaintSafeZoneMessage(this.lastProcessedGameState);
             this.gameUI.RepaintInvestmentsTable(this.lastProcessedGameState);
+
+
+            if (isGood) {
+                var input = this.keyboardInputHandler.GetUsersInput();
+                this.gameUI.AddInputFromUI(input);
+                this.serverConnection.SendMyInput(input);
+            }
 
 
             if (!GameDesign.IsPlayerInGame(this.lastProcessedGameState)) {
@@ -128,11 +133,7 @@ export namespace Game {
 
             this.scene.DisplayGameObjects(this.lastProcessedGameState);
 
-            if (isGood) {
-                var input = this.keyboardInputHandler.GetUsersInput();
-                this.gameUI.AddInputFromUI(input);
-                this.serverConnection.SendMyInput(input);
-            }
+
 
 
             this.audioController.ProcessQueue(this.lastProcessedGameState.soundEffectsQueue, this.lastProcessedGameState.objects[this.lastProcessedGameState.gameObjectsId].position);

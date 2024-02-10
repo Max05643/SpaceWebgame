@@ -9,23 +9,21 @@ export namespace Network {
 
         mapper: Mapper;
         connection: signalR.HubConnection;
-        serverId: string;
 
-        constructor(endpoint: string, serverId: string) {
+        constructor(endpoint: string) {
             this.connection = new signalR.HubConnectionBuilder()
                 .withUrl(endpoint)
                 .withHubProtocol(new MP.MessagePackHubProtocol())
                 .build();
-            this.serverId = serverId;
             this.mapper = new Mapper();
         }
 
         async SendChatMessage(message: string): Promise<boolean> {
-            return await this.connection.invoke<boolean>("AddChatMessage", this.serverId, message);
+            return await this.connection.invoke<boolean>("AddChatMessage", message);
         }
 
         async GetChatMessages(id: number): Promise<GameDesign.GameMessageContainer[] | null> {
-            return await this.connection.invoke<GameDesign.GameMessageContainer[] | null>("GetChatMessages", this.serverId, id);
+            return await this.connection.invoke<GameDesign.GameMessageContainer[] | null>("GetChatMessages", id);
         }
 
 
@@ -41,18 +39,14 @@ export namespace Network {
                 document.location = "/Game/Kicked";
             });
             await this.connection.start();
-            await this.connection.invoke<void>("SubscribeToUpdates", this.serverId);
-        }
-        /** Sends a request to revive the player */
-        async Revive(): Promise<void> {
-            await this.connection.invoke<void>("Revive", this.serverId);
+            await this.connection.invoke<void>("SubscribeToUpdates");
         }
 
         /** Send an input to the server */
         async SendMyInput(input: GameDesign.ClientInput): Promise<void> {
             if (this.mapper.isReady) {
                 const result = this.mapper.mapClientInputToServer(input);
-                await this.connection.invoke<void>("SendInput", this.serverId, result);
+                await this.connection.invoke<void>("SendInput", result);
             }
         }
     }

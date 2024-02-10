@@ -14,14 +14,12 @@ public class HomeController : Controller
     readonly ILogger<HomeController> logger;
     readonly FrontBackCommunication gameServersManager;
     readonly CaptchaValidator captchaValidator;
-    readonly LoadBalancer loadBalancer;
 
-    public HomeController(ILogger<HomeController> logger, LoadBalancer loadBalancer, FrontBackCommunication gameServersManager, CaptchaValidator captchaValidator)
+    public HomeController(ILogger<HomeController> logger, FrontBackCommunication gameServersManager, CaptchaValidator captchaValidator)
     {
         this.captchaValidator = captchaValidator;
         this.logger = logger;
         this.gameServersManager = gameServersManager;
-        this.loadBalancer = loadBalancer;
     }
 
     public IActionResult Index()
@@ -89,9 +87,8 @@ public class HomeController : Controller
         }
         else
         {
-            var serverId = await loadBalancer.GetServerForNewPlayer();
-            await gameServersManager.JoinGame(serverId, playerId!.Value, nick!);
-            return RedirectToAction("Game", "Game", new { serverId = serverId });
+            await gameServersManager.JoinGame(playerId!.Value);
+            return RedirectToAction("Game", "Game");
         }
 
     }

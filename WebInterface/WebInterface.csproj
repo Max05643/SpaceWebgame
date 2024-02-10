@@ -1,6 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <ItemGroup>
+    <None Remove="LuaScripts\AddNewChatMessage" />
+    <None Remove="LuaScripts\GetAllConnectionsByGame" />
+    <None Remove="LuaScripts\GetAllConnectionsByGameAndPlayer" />
+    <None Remove="LuaScripts\GetChatMessages" />
+    <None Remove="LuaScripts\NewConnection" />
+    <None Remove="LuaScripts\RemoveChatMessagesFromServer" />
+    <None Remove="LuaScripts\RemovePlayer" />
     <None Remove="Scripts\audio.ts" />
     <None Remove="Scripts\game.ts" />
     <None Remove="Scripts\graphic.ts" />
@@ -8,6 +15,16 @@
     <None Remove="Scripts\network.ts" />
     <None Remove="Scripts\technical.ts" />
     <None Remove="Scripts\ui.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="LuaScripts\AddNewChatMessage" />
+    <EmbeddedResource Include="LuaScripts\GetAllConnectionsByGame" />
+    <EmbeddedResource Include="LuaScripts\GetAllConnectionsByGameAndPlayer" />
+    <EmbeddedResource Include="LuaScripts\GetChatMessages" />
+    <EmbeddedResource Include="LuaScripts\NewConnection" />
+    <EmbeddedResource Include="LuaScripts\RemoveChatMessagesFromServer" />
+    <EmbeddedResource Include="LuaScripts\RemovePlayer" />
   </ItemGroup>
 
   <ItemGroup>

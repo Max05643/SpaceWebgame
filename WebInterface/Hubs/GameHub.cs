@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using WebInterface.Models;
 using WebInterface.Utils;
+using WebInterface.ClientModels;
 
 namespace WebInterface.Hubs
 {
@@ -43,6 +44,7 @@ namespace WebInterface.Hubs
 
             return playerId;
         }
+
         /// <summary>
         /// Returns current player's nick or null if it is not present or can not be obtained
         /// </summary>
@@ -66,7 +68,7 @@ namespace WebInterface.Hubs
             this.logger = logger;
         }
 
-        public virtual async Task SubscribeToUpdates(Guid serverId)
+        public async Task SubscribeToUpdates()
         {
             var playerId = GetPlayerId();
 
@@ -74,31 +76,20 @@ namespace WebInterface.Hubs
             if (playerId == null)
                 return;
 
-            await FrontBackCommunicationInstance.SubscribeToUpdates(serverId, playerId.Value, Context.ConnectionId);
+            await FrontBackCommunicationInstance.SubscribeToUpdates(playerId.Value, Context.ConnectionId);
         }
 
-        public virtual async Task SendInput(Guid serverId, ClientInput clientInput)
+        public void SendInput(ClientInput clientInput)
         {
             var playerId = GetPlayerId();
 
             if (playerId == null)
                 return;
 
-            await FrontBackCommunicationInstance.SendInput(serverId, playerId.Value, clientInput.ToPlayerInput());
-
-        }
-        public virtual async Task Revive(Guid serverId)
-        {
-            var playerId = GetPlayerId();
-
-            if (playerId == null)
-                return;
-
-            await FrontBackCommunicationInstance.Revive(serverId, playerId.Value);
-
+            FrontBackCommunicationInstance.SendInput(playerId.Value, clientInput);
         }
 
-        public virtual async Task<bool> AddChatMessage(Guid serverId, string message)
+        public async Task<bool> AddChatMessage(string message)
         {
 
             if (!UserTextInputValidator.ValidateChatMessage(message))
@@ -109,16 +100,16 @@ namespace WebInterface.Hubs
             if (playerId == null)
                 return false;
 
-            return await FrontBackCommunicationInstance.AddNewChatMessage(serverId, new ChatMessage() { Message = message, SenderId = playerId.Value, SenderNick = GetPlayerNick() ?? "Player"});
+            return await FrontBackCommunicationInstance.AddNewChatMessage(new ChatMessage() { Message = message, SenderId = playerId.Value, SenderNick = GetPlayerNick() ?? "Player" });
         }
-        public virtual async Task<ICollection<ChatMessageConainer>?> GetChatMessages(Guid serverId, long id)
+        public async Task<IEnumerable<ChatMessageConainer>?> GetChatMessages(long id)
         {
             var playerId = GetPlayerId();
 
             if (playerId == null)
                 return null;
 
-            return await FrontBackCommunicationInstance.GetChatMessages(serverId, playerId.Value, id);
+            return await FrontBackCommunicationInstance.GetChatMessages(playerId.Value, id);
         }
 
 

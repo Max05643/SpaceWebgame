@@ -62,6 +62,15 @@ namespace GameDesign.GameState
 
         void IGameState<PlayerInput, PlayerUpdate>.Tick(TimeSpan deltaTime, IGameController<PlayerUpdate, PlayerInput> gameController)
         {
+
+            foreach (var player in playersManager.Players)
+            {
+                if (player.Value.State != Player.PlayerState.Alive && gameController.PopPlayerInput(player.Key).ReviveRequest)
+                {
+                    playersManager.RevivePlayer(player.Key);
+                }
+            }
+
             TickGame(deltaTime, gameController);
 
             if (playersManager.Players.Count == 0)

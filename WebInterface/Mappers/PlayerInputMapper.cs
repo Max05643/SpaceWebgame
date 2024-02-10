@@ -14,6 +14,7 @@ namespace WebInterface.Mappers
             destination.IsFiring = source.IsFire;
             destination.InvestmentRequest = source.InvestmentRequest;
             destination.RepairRequest = source.RepairRequest;
+            destination.ReviveRequest = source.ReviveRequest;
         }
     }
 }

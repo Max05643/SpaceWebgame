@@ -21,7 +21,6 @@ namespace WebInterface.Utils
                 scriptsPrepared.Add("GetAllConnectionsByGame", LuaScriptsLoader.Load("GetAllConnectionsByGame"));
                 scriptsPrepared.Add("GetAllConnectionsByGameAndPlayer", LuaScriptsLoader.Load("GetAllConnectionsByGameAndPlayer"));
                 scriptsPrepared.Add("NewConnection", LuaScriptsLoader.Load("NewConnection"));
-                scriptsPrepared.Add("RemoveGame", LuaScriptsLoader.Load("RemoveGame"));
                 scriptsPrepared.Add("RemovePlayer", LuaScriptsLoader.Load("RemovePlayer"));
             }
             catch (Exception ex)

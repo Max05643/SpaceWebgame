@@ -2,6 +2,7 @@
 using GameDesign.GameState;
 using GameDesign.Models;
 using GameServerDefinitions;
+using GameServerImplementation;
 using Microsoft.AspNetCore.SignalR;
 using WebInterface.ClientModels;
 using WebInterface.Hubs;
@@ -18,16 +19,37 @@ namespace WebInterface.Utils
         readonly IPlayersConnectionsStorage playersConnectionsStorage;
         readonly IMapper<PlayerUpdate, ClientGameState> gameStateMapper;
         readonly IMapper<ClientInput, PlayerInput> inputMapper;
-        readonly IGameServer<GameStateManager, PlayerInput, PlayerUpdate> gameServer;
+        IGameServer<GameStateManager, PlayerInput, PlayerUpdate>? gameServer = null;
         readonly IHubContext<GameHub, IGameClient> hubContext;
+        readonly IServiceProvider serviceProvider;
 
-        public FrontBackCommunication(IHubContext<GameHub, IGameClient> hubContext, IPlayersConnectionsStorage playersConnectionsStorage, IMapper<PlayerUpdate, ClientGameState> gameStateMapper, IMapper<ClientInput, PlayerInput> inputMapper, IGameServer<GameStateManager, PlayerInput, PlayerUpdate> gameServer)
+        IGameServer<GameStateManager, PlayerInput, PlayerUpdate> GameServer
+        {
+            get
+            {
+                if (gameServer == null)
+                {
+                    gameServer = serviceProvider.GetRequiredService<IGameServer<GameStateManager, PlayerInput, PlayerUpdate>>();
+                }
+                return gameServer;
+            }
+        }
+
+        public FrontBackCommunication(IHubContext<GameHub, IGameClient> hubContext, IPlayersConnectionsStorage playersConnectionsStorage, IMapper<PlayerUpdate, ClientGameState> gameStateMapper, IMapper<ClientInput, PlayerInput> inputMapper, IServiceProvider serviceProvider)
         {
             this.hubContext = hubContext;
             this.playersConnectionsStorage = playersConnectionsStorage;
             this.gameStateMapper = gameStateMapper;
             this.inputMapper = inputMapper;
-            this.gameServer = gameServer;
+            this.serviceProvider = serviceProvider;
+        }
+
+        /// <summary>
+        /// Is player currently in game?
+        /// </summary>
+        public async Task<bool> IsPlayerInGame(PlayerId playerId)
+        {
+            return await GameServer.IsPlayerInGame(playerId);
         }
 
         /// <summary>
@@ -36,7 +58,7 @@ namespace WebInterface.Utils
         /// </summary>
         public async Task SubscribeToUpdates(PlayerId playerId, string connectionId)
         {
-            if (await gameServer.IsPlayerInGame(playerId))
+            if (await GameServer.IsPlayerInGame(playerId))
             {
                 var prevConnection = await playersConnectionsStorage.SwitchConnection(playerId.ToString(), connectionId);
 
@@ -52,7 +74,7 @@ namespace WebInterface.Utils
         /// </summary>
         public async Task<IEnumerable<ChatMessageConainer>> GetChatMessages(PlayerId playerId, long id)
         {
-            return Enumerable.Empty<ChatMessageConainer>();
+            return new List<ChatMessageConainer>();
         }
 
         /// <summary>
@@ -68,7 +90,7 @@ namespace WebInterface.Utils
         /// </summary>
         public Task<bool> JoinGame(PlayerId playerId)
         {
-            return gameServer.AddPlayer(playerId);
+            return GameServer.AddPlayer(playerId);
         }
 
         /// <summary>
@@ -76,15 +98,16 @@ namespace WebInterface.Utils
         /// </summary>
         public Task LeaveGame(PlayerId playerId)
         {
-            return gameServer.LeaveGame(playerId);
+            return GameServer.LeaveGame(playerId);
         }
+
 
         /// <summary>
         /// Sends player's input to the server. Does nothing if operation is impossible
         /// </summary>
-        public void SendInput(PlayerId playerId, PlayerInput playerInput)
+        public void SendInput(PlayerId playerId, ClientInput playerInput)
         {
-            gameServer.AcceptPlayerInput(playerInput, playerId);
+            GameServer.AcceptPlayerInput(inputMapper.Map(playerInput), playerId);
         }
 
 

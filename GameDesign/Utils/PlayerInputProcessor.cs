@@ -24,7 +24,8 @@ namespace GameDesign.Utils
                 Angle = storedInput.Angle,
                 IsFiring = storedInput.IsFiring,
                 InvestmentRequest = null,
-                RepairRequest = false
+                RepairRequest = false,
+                ReviveRequest = false
             };
 
             return storedInput;
@@ -38,7 +39,8 @@ namespace GameDesign.Utils
                 Angle = newInput.Angle,
                 IsFiring = newInput.IsFiring,
                 RepairRequest = storedInput.RepairRequest || newInput.RepairRequest,
-                InvestmentRequest = newInput.InvestmentRequest == null ? storedInput.InvestmentRequest : newInput.InvestmentRequest
+                InvestmentRequest = newInput.InvestmentRequest == null ? storedInput.InvestmentRequest : newInput.InvestmentRequest,
+                ReviveRequest = storedInput.ReviveRequest || newInput.ReviveRequest
             };
 
             return inputToStore;

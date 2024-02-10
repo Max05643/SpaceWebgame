@@ -178,6 +178,7 @@ export class ClientInput {
     public isFire: boolean = false;
     public investmentRequest: number | null = null;
     public repairRequest: boolean = false;
+    public reviveRequest: boolean = false;
 }
 
 

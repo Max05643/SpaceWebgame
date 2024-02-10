@@ -37,5 +37,10 @@ namespace GameDesign.Models
         /// Can be false, if there is no request on this frame
         /// </summary>
         public bool RepairRequest { get; set; } = false;
+
+        /// <summary>
+        /// Request to make player alive
+        /// </summary>
+        public bool ReviveRequest {  get; set; } = false;
     }
 }

@@ -29,22 +29,21 @@ namespace WebInterface.Controllers
         {
             return View();
         }
-        public async Task<IActionResult> Game([FromQuery] Guid? serverId)
+        public async Task<IActionResult> Game()
         {
             var playerId = HttpContext.GetPlayerId();
 
-            if (!playerId.HasValue || !serverId.HasValue)
+            if (!playerId.HasValue)
             {
                 return BadRequest();
             }
 
-            if (!(await gameServersManager.CheckIfGameExists(serverId.Value)))
+            if (!(await gameServersManager.IsPlayerInGame(playerId.Value)))
             {
                 return BadRequest();
             }
 
             ViewData["playerId"] = playerId;
-            ViewData["serverId"] = serverId.Value;
             return View();
         }
     }

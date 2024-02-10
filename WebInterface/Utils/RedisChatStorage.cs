@@ -1,4 +1,4 @@
-﻿using GameServersManager.Models;
+﻿using WebInterface.Models;
 using StackExchange.Redis;
 using System.Text.Json;
 using System.Text.Json.Serialization;

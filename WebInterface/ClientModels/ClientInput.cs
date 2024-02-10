@@ -26,6 +26,10 @@ namespace WebInterface.ClientModels
         [Key("_rr")]
         public bool RepairRequest { get; set; } = false;
 
+        [Key("_rv")]
+        public bool ReviveRequest { get; set; } = false;
+
+
         public override string ToString()
         {
             return $"Angle: {Angle}, Movement power: {MovementPower}, IsFire:{IsFire}";

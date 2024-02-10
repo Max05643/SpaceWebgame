@@ -103,12 +103,15 @@ export namespace UI {
 
         private lastInvestmentRequest: number | null = null;
         private lastRepairRequest: boolean = false;
+        private lastReviveRequest: boolean = false;
 
         AddInputFromUI(input: GameDesign.ClientInput): void {
             input.investmentRequest = this.lastInvestmentRequest;
             input.repairRequest = this.lastRepairRequest;
+            input.reviveRequest = this.lastReviveRequest;
             this.lastInvestmentRequest = null;
             this.lastRepairRequest = false;
+            this.lastReviveRequest = false;
         }
 
         constructor(reviveButton: HTMLButtonElement, reviveMessage: HTMLDivElement, debugMessage: HTMLParagraphElement, playersTable: HTMLTableElement, safeZoneMessage: HTMLDivElement, investmentsTable: HTMLTableElement, damageEffects: HTMLElement) {
@@ -229,11 +232,11 @@ export namespace UI {
 
 
         }
-        RepaintReviveInterface(gameState: GameDesign.ClientGameState | null, onReviveButtonPress: () => void): void {
+        RepaintReviveInterface(gameState: GameDesign.ClientGameState | null): void {
 
             if (gameState != null && gameState.state != GameDesign.PlayerState.Alive) {
                 this.reviveMessage.hidden = false;
-                this.reviveButton.onclick = onReviveButtonPress;
+                this.reviveButton.onclick = () => { this.lastReviveRequest = true; };
             }
             else {
                 this.reviveMessage.hidden = true;

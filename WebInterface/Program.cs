@@ -1,14 +1,18 @@
 using GameDesign.Utils;
-using GameServersManager.Models;
-using GameServersManager.Utils;
-using Genbox.VelcroPhysics.Shared;
+using WebInterface.Models;
+using WebInterface.Utils;
 using MessagePack;
 using MessagePack.Resolvers;
 using Microsoft.AspNetCore.DataProtection;
 using WebInterface.Hubs;
-using WebInterface.Utils;
 using StackExchange.Redis;
-using System.Reflection;
+using Boxed.Mapping;
+using GameDesign.Models;
+using WebInterface.ClientModels;
+using WebInterface.Mappers;
+using GameServerDefinitions;
+using GameDesign.GameState;
+using GameServerImplementation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -67,22 +71,20 @@ builder.Services.AddSignalR().AddMessagePackProtocol(opts =>
 builder.Services.AddSingleton<IPlayersConnectionsStorage, RedisPlayersConnectionsStorage>();
 builder.Services.AddSingleton<IChatStorage, RedisChatStorage>();
 
-
-
-
+builder.Services.AddSingleton<IMapper<PlayerUpdate.PlayerSoundEffect, ClientGameState.ClientSoundEffect>, SoundEffectMapper>();
+builder.Services.AddSingleton<IMapper<PlayerUpdate.PlayerGameObject, ClientGameObject>, GameObjectMapper>();
+builder.Services.AddSingleton<IMapper<PlayerUpdate, ClientGameState>, GameStateMapper>();
+builder.Services.AddSingleton<IMapper<ClientInput, PlayerInput>, PlayerInputMapper>();
 builder.Services.AddSingleton<FrontBackCommunication>();
-builder.Services.AddSingleton<IMultiServerClientsCommunication>((services) => services.GetRequiredService<FrontBackCommunication>());
+builder.Services.AddSingleton<IPlayersCommunication<PlayerUpdate>, FrontBackCommunication>((services) => services.GetRequiredService<FrontBackCommunication>());
+builder.Services.AddSingleton<IPlayerInputProcessor<PlayerInput>, PlayerInputProcessor>();
+builder.Services.AddSingleton<IPlayerInputStorageFactory<PlayerInput>, InMemoryPlayerInputStorageFactory<PlayerInput>>();
+builder.Services.AddSingleton<GameServerSettings>((services) => { return GameServerSettingsFactory.GetServerSettings(services.GetRequiredService<IConfiguration>()); });
+builder.Services.AddSingleton<IGameStateFactory<GameStateManager, PlayerInput, PlayerUpdate>, GameStateFactory>();
+builder.Services.AddSingleton<IGameServer<GameStateManager, PlayerInput, PlayerUpdate>, GameServer<GameStateManager, PlayerInput, PlayerUpdate>>();
 
 
-builder.Services.AddSingleton<IGameServersManager, GameServersManager.Utils.GameServersManager>();
-
-
-builder.Services.AddSingleton<LoadBalancer>();
-
-builder.Services.AddControllersWithViews().AddJsonOptions(options =>
-{
-    options.JsonSerializerOptions.Converters.Add(new Vector2Converter());
-});
+builder.Services.AddControllersWithViews();
 
 
 

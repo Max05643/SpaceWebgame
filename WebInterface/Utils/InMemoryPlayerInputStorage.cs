@@ -64,4 +64,12 @@ namespace WebInterface.Utils
             }
         }
     }
+
+    public class InMemoryPlayerInputStorageFactory<PlayerInput> : IPlayerInputStorageFactory<PlayerInput>
+    {
+        PlayerInputStorage<PlayerInput> IPlayerInputStorageFactory<PlayerInput>.CreateNewStorage(IPlayerInputProcessor<PlayerInput> playerInputProcessor)
+        {
+            return new InMemoryPlayerInputStorage<PlayerInput>(playerInputProcessor);
+        }
+    }
 }
