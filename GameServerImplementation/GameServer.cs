@@ -85,7 +85,7 @@ namespace GameServerImplementation
 
                     var timeLeftMs = Math.Max(0, serverSettings.TargetTickTimeMs - (int)gameTickStopWatch.ElapsedMilliseconds - 5);
 
-                    if (timeLeftMs <= 10)
+                    if (timeLeftMs <= 5)
                     {
                         Thread.Sleep(timeLeftMs);
                         currentEvent = new GameTickEvent<GameState, PlayerInput, PlayerUpdate>(gameTickStopWatch, this);
