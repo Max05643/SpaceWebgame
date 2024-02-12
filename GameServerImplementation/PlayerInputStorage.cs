@@ -33,5 +33,11 @@ namespace GameServerImplementation
         /// </summary>
         public abstract PlayerInput PopPlayerInput(PlayerId playerId);
 
+        /// <summary>
+        /// Returns the time when last input from specified player was stored or null if none is stored
+        /// </summary>
+        public abstract DateTime? GetLastInputTime(PlayerId playerId);
+
+
     }
 }

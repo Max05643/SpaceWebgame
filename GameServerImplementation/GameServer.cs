@@ -43,6 +43,30 @@ namespace GameServerImplementation
             // Start the game loop
             var mainGameLoopTask = new Task(MainGameLoop, TaskCreationOptions.LongRunning);
             mainGameLoopTask.Start();
+
+            Task.Run(PlayersTimeoutCheckLoop);
+        }
+
+        /// <summary>
+        /// Checks whether any players are timed out and kicks them
+        /// </summary>
+        async Task PlayersTimeoutCheckLoop()
+        {
+            while (!cancellationTokenSource.IsCancellationRequested)
+            {
+                try
+                {
+                    await Task.Delay(serverSettings.PlayerKickTimeout, cancellationTokenSource.Token);
+                    var taskCompletionSource = new TaskCompletionSource();
+                    await serverEventQueue.Writer.WriteAsync(new TimeoutCheckEvent<GameState, PlayerInput, PlayerUpdate>(taskCompletionSource));
+                    await taskCompletionSource.Task;
+                }
+                catch (OperationCanceledException)
+                {
+                    logger.LogInformation("PlayersTimeoutCheckLoop stopped");
+                }
+            }
+
         }
 
 

@@ -24,7 +24,7 @@ namespace WebInterface.Utils
             var tickTime = int.Parse(configuration["Game:TargetTickTime"] ?? "33");
             var playerKickTimeout = int.Parse(configuration["Game:PlayerKickTimeoutInSeconds"] ?? "60");
 
-            var result = new GameServerSettings() { TargetTickTimeMs = tickTime};
+            var result = new GameServerSettings() { TargetTickTimeMs = tickTime, PlayerKickTimeout = TimeSpan.FromSeconds(playerKickTimeout) };
 
 
             return result;

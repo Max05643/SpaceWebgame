@@ -15,9 +15,12 @@ namespace WebInterface.Utils
         {
             public PlayerInput LastInput { get; set; }
 
-            public InputEntry(PlayerInput lastInput)
+            public DateTime LastInputTime { get; set; }
+
+            public InputEntry(PlayerInput lastInput, DateTime lastInputTime)
             {
                 LastInput = lastInput;
+                LastInputTime = lastInputTime;
             }
         }
 
@@ -29,7 +32,7 @@ namespace WebInterface.Utils
 
         public override void DisposePlayer(PlayerId playerId)
         {
-            throw new NotImplementedException();
+            inputStorage.TryRemove(playerId, out _);
         }
 
         public override PlayerInput PopPlayerInput(PlayerId playerId)
@@ -56,11 +59,27 @@ namespace WebInterface.Utils
                 lock (value)
                 {
                     value.LastInput = playerInputProcessor.StoreNewInput(value.LastInput, newInput);
+                    value.LastInputTime = DateTime.Now;
                 }
             }
             else
             {
-                inputStorage.TryAdd(playerId, new InputEntry(newInput));
+                inputStorage.TryAdd(playerId, new InputEntry(newInput, DateTime.Now));
+            }
+        }
+
+        public override DateTime? GetLastInputTime(PlayerId playerId)
+        {
+            if (inputStorage.TryGetValue(playerId, out InputEntry? value))
+            {
+                lock (value)
+                {
+                    return value.LastInputTime;
+                }
+            }
+            else
+            {
+                return null;
             }
         }
     }

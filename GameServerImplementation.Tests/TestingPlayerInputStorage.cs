@@ -33,6 +33,11 @@ namespace GameServerImplementation.Tests
             storage.Remove(playerId);
         }
 
+        public override DateTime? GetLastInputTime(PlayerId playerId)
+        {
+            throw new NotImplementedException();
+        }
+
         public override PlayerInput PopPlayerInput(PlayerId playerId)
         {
             if (!storage.ContainsKey(playerId))
