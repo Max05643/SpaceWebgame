@@ -7,19 +7,19 @@ using System.Threading.Tasks;
 namespace WebInterface.Models
 {
     /// <summary>
-    /// Represents a way to store chat messages that belong to particular server in a thread-safe way
+    /// Represents a way to store chat messages in a thread-safe way
     /// </summary>
     public interface IChatStorage
     {
         /// <summary>
-        /// Adds new message to specified server
+        /// Adds new message to the server
         /// </summary>
-        Task AddNewChatMessage(Guid serverId, ChatMessage chatMessage);
+        Task AddNewChatMessage(ChatMessage chatMessage);
 
         /// <summary>
         /// Returns all chat messages with ids greater than specified. May return zero messages
         /// </summary>
-        Task<ICollection<ChatMessageConainer>> GetChatMessages(Guid serverId, long id);
+        Task<ICollection<ChatMessageConainer>> GetChatMessages(long id);
 
     }
 }

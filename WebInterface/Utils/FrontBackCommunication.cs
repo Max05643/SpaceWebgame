@@ -22,6 +22,7 @@ namespace WebInterface.Utils
         IGameServer<GameStateManager, PlayerInput, PlayerUpdate>? gameServer = null;
         readonly IHubContext<GameHub, IGameClient> hubContext;
         readonly IServiceProvider serviceProvider;
+        readonly IChatStorage chatStorage;
 
         IGameServer<GameStateManager, PlayerInput, PlayerUpdate> GameServer
         {
@@ -35,13 +36,14 @@ namespace WebInterface.Utils
             }
         }
 
-        public FrontBackCommunication(IHubContext<GameHub, IGameClient> hubContext, IPlayersConnectionsStorage playersConnectionsStorage, IMapper<PlayerUpdate, ClientGameState> gameStateMapper, IMapper<ClientInput, PlayerInput> inputMapper, IServiceProvider serviceProvider)
+        public FrontBackCommunication(IHubContext<GameHub, IGameClient> hubContext, IPlayersConnectionsStorage playersConnectionsStorage, IMapper<PlayerUpdate, ClientGameState> gameStateMapper, IMapper<ClientInput, PlayerInput> inputMapper, IChatStorage chatStorage, IServiceProvider serviceProvider)
         {
             this.hubContext = hubContext;
             this.playersConnectionsStorage = playersConnectionsStorage;
             this.gameStateMapper = gameStateMapper;
             this.inputMapper = inputMapper;
             this.serviceProvider = serviceProvider;
+            this.chatStorage = chatStorage;
         }
 
         /// <summary>
@@ -74,7 +76,14 @@ namespace WebInterface.Utils
         /// </summary>
         public async Task<IEnumerable<ChatMessageConainer>> GetChatMessages(PlayerId playerId, long id)
         {
-            return new List<ChatMessageConainer>();
+            if (await IsPlayerInGame(playerId))
+            {
+                return await chatStorage.GetChatMessages(id);
+            }
+            else
+            {
+                return new List<ChatMessageConainer>();
+            }
         }
 
         /// <summary>
@@ -82,7 +91,19 @@ namespace WebInterface.Utils
         /// </summary>
         public async Task<bool> AddNewChatMessage(ChatMessage message)
         {
-            return false;
+            if (!await IsPlayerInGame(message.SenderId))
+            {
+                return false;
+            }
+            else if (!UserTextInputValidator.ValidateChatMessage(message.Message))
+            {
+                return false;
+            }
+            else
+            {
+                await chatStorage.AddNewChatMessage(message);
+                return true;
+            }
         }
 
         /// <summary>

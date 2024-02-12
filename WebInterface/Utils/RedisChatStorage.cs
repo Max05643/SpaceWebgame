@@ -38,7 +38,6 @@ namespace WebInterface.Utils
             {
                 scriptsPrepared.Add("AddNewChatMessage", LuaScriptsLoader.Load("AddNewChatMessage"));
                 scriptsPrepared.Add("GetChatMessages", LuaScriptsLoader.Load("GetChatMessages"));
-                scriptsPrepared.Add("RemoveChatMessagesFromServer", LuaScriptsLoader.Load("RemoveChatMessagesFromServer"));
             }
             catch (Exception ex)
             {
@@ -47,12 +46,12 @@ namespace WebInterface.Utils
         }
 
 
-        public async Task AddNewChatMessage(Guid serverId, ChatMessage chatMessage)
+        public async Task AddNewChatMessage(ChatMessage chatMessage)
         {
             try
             {
                 var redisClient = connectionMultiplexer.GetDatabase();
-                var args = new { gameKey = (RedisKey)serverId.ToString(), maxMessagesPerChatStored, message = JsonSerializer.Serialize(chatMessage) };
+                var args = new { gameKey = (RedisKey)"spacewarchat", maxMessagesPerChatStored, message = JsonSerializer.Serialize(chatMessage) };
                 await redisClient.ScriptEvaluateAsync(scriptsPrepared["AddNewChatMessage"], args);
             }
             catch (Exception ex)
@@ -61,12 +60,12 @@ namespace WebInterface.Utils
             }
         }
 
-        public async Task<ICollection<ChatMessageConainer>> GetChatMessages(Guid serverId, long id)
+        public async Task<ICollection<ChatMessageConainer>> GetChatMessages(long id)
         {
             try
             {
                 var redisClient = connectionMultiplexer.GetDatabase();
-                var args = new { gameKey = (RedisKey)serverId.ToString(), id = id };
+                var args = new { gameKey = (RedisKey)"spacewarchat", id = id };
                 var result = await redisClient.ScriptEvaluateAsync(scriptsPrepared["GetChatMessages"], args);
 
 
@@ -94,20 +93,6 @@ namespace WebInterface.Utils
             {
                 logger.LogError(ex.ToString());
                 return Array.Empty<ChatMessageConainer>();
-            }
-        }
-
-        public async Task ShutDownServer(Guid serverId)
-        {
-            try
-            {
-                var redisClient = connectionMultiplexer.GetDatabase();
-                var args = new { gameKey = (RedisKey)serverId.ToString() };
-                await redisClient.ScriptEvaluateAsync(scriptsPrepared["RemoveChatMessagesFromServer"], args);
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex.ToString());
             }
         }
     }
