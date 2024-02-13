@@ -19,31 +19,20 @@ namespace WebInterface.Utils
         readonly IPlayersConnectionsStorage playersConnectionsStorage;
         readonly IMapper<PlayerUpdate, ClientGameState> gameStateMapper;
         readonly IMapper<ClientInput, PlayerInput> inputMapper;
-        IGameServer<GameStateManager, PlayerInput, PlayerUpdate>? gameServer = null;
+        readonly IGameServer<GameStateManager, PlayerInput, PlayerUpdate> gameServer;
         readonly IHubContext<GameHub, IGameClient> hubContext;
-        readonly IServiceProvider serviceProvider;
         readonly IChatStorage chatStorage;
 
-        IGameServer<GameStateManager, PlayerInput, PlayerUpdate> GameServer
-        {
-            get
-            {
-                if (gameServer == null)
-                {
-                    gameServer = serviceProvider.GetRequiredService<IGameServer<GameStateManager, PlayerInput, PlayerUpdate>>();
-                }
-                return gameServer;
-            }
-        }
 
-        public FrontBackCommunication(IHubContext<GameHub, IGameClient> hubContext, IPlayersConnectionsStorage playersConnectionsStorage, IMapper<PlayerUpdate, ClientGameState> gameStateMapper, IMapper<ClientInput, PlayerInput> inputMapper, IChatStorage chatStorage, IServiceProvider serviceProvider)
+        public FrontBackCommunication(IHubContext<GameHub, IGameClient> hubContext, IPlayersConnectionsStorage playersConnectionsStorage, IMapper<PlayerUpdate, ClientGameState> gameStateMapper, IMapper<ClientInput, PlayerInput> inputMapper, IChatStorage chatStorage, IGameServerFactory<GameStateManager, PlayerInput, PlayerUpdate> gameServerFactory)
         {
             this.hubContext = hubContext;
             this.playersConnectionsStorage = playersConnectionsStorage;
             this.gameStateMapper = gameStateMapper;
             this.inputMapper = inputMapper;
-            this.serviceProvider = serviceProvider;
             this.chatStorage = chatStorage;
+
+            gameServer = gameServerFactory.CreateServer(this);
         }
 
         /// <summary>
@@ -51,7 +40,7 @@ namespace WebInterface.Utils
         /// </summary>
         public async Task<bool> IsPlayerInGame(PlayerId playerId)
         {
-            return await GameServer.IsPlayerInGame(playerId);
+            return await gameServer.IsPlayerInGame(playerId);
         }
 
         /// <summary>
@@ -60,7 +49,7 @@ namespace WebInterface.Utils
         /// </summary>
         public async Task SubscribeToUpdates(PlayerId playerId, string connectionId)
         {
-            if (await GameServer.IsPlayerInGame(playerId))
+            if (await gameServer.IsPlayerInGame(playerId))
             {
                 var prevConnection = await playersConnectionsStorage.SwitchConnection(playerId.ToString(), connectionId);
 
@@ -111,7 +100,7 @@ namespace WebInterface.Utils
         /// </summary>
         public Task<bool> JoinGame(PlayerId playerId)
         {
-            return GameServer.AddPlayer(playerId);
+            return gameServer.AddPlayer(playerId);
         }
 
         /// <summary>
@@ -119,7 +108,7 @@ namespace WebInterface.Utils
         /// </summary>
         public Task LeaveGame(PlayerId playerId)
         {
-            return GameServer.LeaveGame(playerId);
+            return gameServer.LeaveGame(playerId);
         }
 
 
@@ -128,7 +117,7 @@ namespace WebInterface.Utils
         /// </summary>
         public void SendInput(PlayerId playerId, ClientInput playerInput)
         {
-            GameServer.AcceptPlayerInput(inputMapper.Map(playerInput), playerId);
+            gameServer.AcceptPlayerInput(inputMapper.Map(playerInput), playerId);
         }
 
 

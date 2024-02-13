@@ -71,17 +71,19 @@ builder.Services.AddSignalR().AddMessagePackProtocol(opts =>
 builder.Services.AddSingleton<IPlayersConnectionsStorage, RedisPlayersConnectionsStorage>();
 builder.Services.AddSingleton<IChatStorage, RedisChatStorage>();
 
-builder.Services.AddSingleton<IMapper<PlayerUpdate.PlayerSoundEffect, ClientGameState.ClientSoundEffect>, SoundEffectMapper>();
-builder.Services.AddSingleton<IMapper<PlayerUpdate.PlayerGameObject, ClientGameObject>, GameObjectMapper>();
-builder.Services.AddSingleton<IMapper<PlayerUpdate, ClientGameState>, GameStateMapper>();
-builder.Services.AddSingleton<IMapper<ClientInput, PlayerInput>, PlayerInputMapper>();
-builder.Services.AddSingleton<FrontBackCommunication>();
 builder.Services.AddSingleton<IPlayersCommunication<PlayerUpdate>, FrontBackCommunication>((services) => services.GetRequiredService<FrontBackCommunication>());
 builder.Services.AddSingleton<IPlayerInputProcessor<PlayerInput>, PlayerInputProcessor>();
 builder.Services.AddSingleton<IPlayerInputStorageFactory<PlayerInput>, InMemoryPlayerInputStorageFactory<PlayerInput>>();
 builder.Services.AddSingleton<GameServerSettings>((services) => { return GameServerSettingsFactory.GetServerSettings(services.GetRequiredService<IConfiguration>()); });
 builder.Services.AddSingleton<IGameStateFactory<GameStateManager, PlayerInput, PlayerUpdate>, GameStateFactory>();
-builder.Services.AddSingleton<IGameServer<GameStateManager, PlayerInput, PlayerUpdate>, GameServer<GameStateManager, PlayerInput, PlayerUpdate>>();
+builder.Services.AddSingleton<IGameServerFactory<GameStateManager, PlayerInput, PlayerUpdate>, GameServerFactory<GameStateManager, PlayerInput, PlayerUpdate>>();
+
+
+builder.Services.AddSingleton<IMapper<PlayerUpdate.PlayerSoundEffect, ClientGameState.ClientSoundEffect>, SoundEffectMapper>();
+builder.Services.AddSingleton<IMapper<PlayerUpdate.PlayerGameObject, ClientGameObject>, GameObjectMapper>();
+builder.Services.AddSingleton<IMapper<PlayerUpdate, ClientGameState>, GameStateMapper>();
+builder.Services.AddSingleton<IMapper<ClientInput, PlayerInput>, PlayerInputMapper>();
+builder.Services.AddSingleton<FrontBackCommunication>();
 
 
 builder.Services.AddControllersWithViews();
