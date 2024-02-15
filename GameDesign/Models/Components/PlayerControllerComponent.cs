@@ -339,13 +339,6 @@ namespace GameDesign.Models.Components
         }
 
 
-        public override void AfterPhysicalCalculation(float deltaTime, IPlayerInputProvider<PlayerInput> playerInputProvider)
-        {
-            foreach (var collision in physicalComponent.CurrentFrameCollisions)
-            {
-                DestructionUtils.CalculateCollisionResults(Object, this, collision.gameObjectB);
-            }
-        }
 
         bool IDestructible.ReceiveDamage(int damageAmount)
         {

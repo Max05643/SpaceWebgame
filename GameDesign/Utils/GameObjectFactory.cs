@@ -116,6 +116,7 @@ namespace GameDesign.Utils
             spriteComponent.SetupGraphicLibraryEntryName("BlackHole");
 
             _ = new BlackHoleComponent(obj, attractor);
+            _ = new DestructionProcessorComponent(obj);
 
             gameStateManager.sceneManager.RegisterGameObject(obj);
             gameStateManager.sceneManager.RegisterGameObject(attractor);
@@ -179,7 +180,7 @@ namespace GameDesign.Utils
                 CollisionCategory.Projectile,
                 CollisionCategory.All ^ CollisionCategory.Projectile);
             _ = new ProjectileComponent(obj, playersObject, damage, playerId, direction * speed, 5);
-
+            _ = new DestructionProcessorComponent(obj);
 
             gameStateManager.sceneManager.RegisterGameObject(obj);
             return obj;
@@ -213,7 +214,7 @@ namespace GameDesign.Utils
                 CollisionCategory.Player,
                 CollisionCategory.All);
             var playerController = new PlayerControllerComponent(obj, playerId, 5);
-
+            _ = new DestructionProcessorComponent(obj);
 
             gameStateManager.sceneManager.RegisterGameObject(obj);
             return obj;
@@ -243,6 +244,7 @@ namespace GameDesign.Utils
 
 
             _ = new AsteroidComponent(obj, 200, 10, false, false, true, 10);
+            _ = new DestructionProcessorComponent(obj);
 
             gameStateManager.sceneManager.RegisterGameObject(obj);
             return obj;

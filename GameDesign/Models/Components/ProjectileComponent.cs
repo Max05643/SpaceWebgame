@@ -34,13 +34,6 @@ namespace GameDesign.Models.Components
                 ((IDestructible)this).DieImmediatly();
             }
         }
-        public override void AfterPhysicalCalculation(float deltaTime, IPlayerInputProvider<PlayerInput> playerInputProvider)
-        {
-            foreach (var collision in physicalComponent.CurrentFrameCollisions)
-            {
-                DestructionUtils.CalculateCollisionResults(Object, this, collision.gameObjectB);
-            }
-        }
         public ProjectileComponent(GameObject parentObject, GameObject playersObject, int damage, Guid shotByPlayerId, Vector2 velocity, float timeToLiveInSeconds) : base (parentObject)
         {
             this.timeToLiveInSeconds = timeToLiveInSeconds;

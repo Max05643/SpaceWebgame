@@ -38,13 +38,6 @@ namespace GameDesign.Models.Components
             attractor.RemoveThisObject();
         }
 
-        public override void AfterPhysicalCalculation(float deltaTime, IPlayerInputProvider<PlayerInput> playerInputProvider)
-        {
-            foreach (var collision in physicalComponent.CurrentFrameCollisions)
-            {
-                DestructionUtils.CalculateCollisionResults(Object, this, collision.gameObjectB);
-            }
-        }
         bool IDestructible.IsInvincible => true;
 
         bool IDestructible.IsInfiniteDamage => true;
