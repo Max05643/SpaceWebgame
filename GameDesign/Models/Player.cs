@@ -28,10 +28,5 @@ namespace GameDesign.Models
         /// The id of GameObject that represents this player in the game world
         /// </summary>
         public int? PlayersGameObjectId { get; set; } = null;
-
-        /// <summary>
-        /// Number of game points that is currently held by this player
-        /// </summary>
-        public int Points { get; set; } = 0;
     }
 }

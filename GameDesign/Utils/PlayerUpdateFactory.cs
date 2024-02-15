@@ -63,7 +63,7 @@ namespace GameDesign.Utils
                 var playerComponent = gameStateManager.sceneManager.GameObjects[player.PlayersGameObjectId!.Value].GetComponent<PlayerControllerComponent>();
 
                 personalUpdate.IsSafeZone = playerComponent.Status == PlayerControllerComponent.PlayerStatus.SafeZone;
-                personalUpdate.Points = player.Points;
+                personalUpdate.Points = playerComponent.Points;
                 personalUpdate.AlreadyInvested = playerComponent.AlreadyInvested.ToDictionary(pair => pair.Key, pair => pair.Value);
                 personalUpdate.Health = playerComponent.Health;
                 personalUpdate.MaxHealth = playerComponent.MaxHealth;

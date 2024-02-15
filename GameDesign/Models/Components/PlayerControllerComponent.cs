@@ -21,6 +21,11 @@ namespace GameDesign.Models.Components
 
 
         /// <summary>
+        /// Number of game points that is currently held by this player
+        /// </summary>
+        public int Points { get; private set; } = 0;
+
+        /// <summary>
         /// The cost of restoring player's current health to max level in points
         /// </summary>
         public int GetRepairCost()
@@ -34,7 +39,7 @@ namespace GameDesign.Models.Components
         void RepairHealth()
         {
             int repairCost = GetRepairCost();
-            if (Health < MaxHealth && Object.GameStateManager.playersManager.Players[PlayerId].Points >= repairCost)
+            if (Health < MaxHealth && Points >= repairCost)
             {
                 RemovePoints(repairCost);
                 Health = MaxHealth;
@@ -48,7 +53,7 @@ namespace GameDesign.Models.Components
         /// <param name="investmentType"></param>
         void InvestInCharacteristic(PlayerInvestmentState.InvestmentType investmentType)
         {
-            if (Object.GameStateManager.playersManager.Players[PlayerId].Points < 10 || Status != PlayerStatus.SafeZone || !playerInvestmentState.CanInvest(investmentType))
+            if (Points < 10 || Status != PlayerStatus.SafeZone || !playerInvestmentState.CanInvest(investmentType))
                 return;
             playerInvestmentState.InvestPoints(investmentType, 10);
             RemovePoints(10);
@@ -274,7 +279,7 @@ namespace GameDesign.Models.Components
         /// </summary>
         public void AddPoints(int amount)
         {
-            Object.GameStateManager.playersManager.Players[PlayerId].Points += amount;
+            Points += amount;
         }
 
         /// <summary>
@@ -282,8 +287,8 @@ namespace GameDesign.Models.Components
         /// </summary>
         void RemovePoints(int amount)
         {
-            Object.GameStateManager.playersManager.Players[PlayerId].Points -= amount;
-            Object.GameStateManager.playersManager.Players[PlayerId].Points = Math.Max(0, Object.GameStateManager.playersManager.Players[PlayerId].Points);
+            Points -= amount;
+            Points = Math.Max(0, Points);
         }
 
         /// <summary>

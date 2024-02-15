@@ -50,7 +50,6 @@ namespace GameDesign.GameState
                     gameStateManager.sceneManager.RemoveGameObject(player.PlayersGameObjectId.Value);
                 player.State = Player.PlayerState.Dead;
                 player.PlayersGameObjectId = null;
-                player.Points = 0;
             }
         }
 
