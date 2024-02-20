@@ -36,11 +36,23 @@ namespace GameDesign.GameState
             audioManager = new AudioManager(this);
         }
 
+
+        TimeSpan timeSinceLastSpawn = TimeSpan.Zero;
+
         /// <summary>
         /// Runs a game tick with specified delta time
         /// </summary>
         void TickGame(TimeSpan deltaTime, IPlayerInputProvider<PlayerInput> playerInputProvider)
         {
+
+            timeSinceLastSpawn += deltaTime;
+
+            if (timeSinceLastSpawn > settings.ObjectsSpawnSettings.RandomSpawnInterval)
+            {
+                timeSinceLastSpawn = TimeSpan.Zero;
+                this.ProcessObjectsSpawn();
+            }
+
             float deltaTimeSeconds = (float)deltaTime.TotalSeconds;
 
             audioManager.ClearCurrentFrameClips(deltaTimeSeconds);
