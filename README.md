@@ -1,6 +1,6 @@
 # Web-based multiplayer game on a space theme
 
-![Screenshot](Screenshots/1.jpg)
+![Screenshot](Screenshots/1.gif)
 
 It's a simple project implementing a multiplayer web-based game with simple physics system. It's written using ASP.NET Core 7.0. It uses SignalR in order to establish a persistent connection between front and back.
 It has sound effects, music, some animations and basic gameplay features. 
@@ -11,9 +11,9 @@ It won't be developed further, however it already supports:
 - Interaction between players within the game
 - System of health, damage and ship upgrades for players
 
-![Screenshot](Screenshots/2.jpg)
+![Screenshot](Screenshots/2.gif)
 
-![Screenshot](Screenshots/3.jpg)
+![Screenshot](Screenshots/3.gif)
 
 Use it in any way you want. A link to the original repository would be appreciated if you do use parts of my code somewhere.
 
